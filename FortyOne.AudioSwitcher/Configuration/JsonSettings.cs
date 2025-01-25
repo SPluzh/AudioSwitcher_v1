@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using fastJSON;
 
@@ -38,14 +39,30 @@ namespace FortyOne.AudioSwitcher.Configuration
 
         public void Save()
         {
-            try
+            lock (_mutex)
             {
-                //Write the result to file
-                File.WriteAllText(_path, JSON.Beautify(JSON.ToJSON(_settingsObject)));
-            }
-            catch
-            {
-                //Too bad if we can't save, not like there's anything vitally important in settings
+                try
+                {
+                    var json = JSON.ToJSON(_settingsObject);
+                    var beautified = JSON.Beautify(json);
+                    
+                    // Write to a temporary file first
+                    var tempPath = _path + ".tmp";
+                    File.WriteAllText(tempPath, beautified);
+                    
+                    // If the write succeeded, move the temp file to the real location
+                    if (File.Exists(_path))
+                        File.Delete(_path);
+                        
+                    File.Move(tempPath, _path);
+                    
+                    System.Diagnostics.Debug.WriteLine($"Settings saved successfully to {_path}");
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error saving settings: {ex.Message}");
+                    throw; // Re-throw so the application knows about the failure
+                }
             }
         }
 
@@ -61,8 +78,17 @@ namespace FortyOne.AudioSwitcher.Configuration
         {
             lock (_mutex)
             {
-                _settingsObject[key] = value;
-                Save();
+                try
+                {
+                    _settingsObject[key] = value;
+                    Save();
+                    System.Diagnostics.Debug.WriteLine($"Successfully set and saved {key}={value}");
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error setting {key}={value}: {ex.Message}");
+                    throw;
+                }
             }
         }
     }

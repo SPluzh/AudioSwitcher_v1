@@ -47,34 +47,51 @@ namespace FortyOne.AudioSwitcher.HotKeyData
                 var hotkeydata = Program.Settings.HotKeys;
                 if (string.IsNullOrEmpty(hotkeydata))
                 {
+                    System.Diagnostics.Debug.WriteLine("No hotkey data found");
                     RefreshHotkeys();
                     return;
                 }
+
+                System.Diagnostics.Debug.WriteLine($"Loading hotkeys from: {hotkeydata}");
 
                 var entries = hotkeydata.Split(new[] { ",", "[", "]" }, StringSplitOptions.RemoveEmptyEntries);
 
                 for (var i = 0; i < entries.Length; i++)
                 {
-                    var key = int.Parse(entries[i++]);
-                    var modifiers = int.Parse(entries[i++]);
-                    var hk = new HotKey();
+                    try
+                    {
+                        var key = int.Parse(entries[i++]);
+                        var modifiers = int.Parse(entries[i++]);
+                        var hk = new HotKey();
 
-                    var r = new Regex(ConfigurationSettings.GUID_REGEX);
-                    var matches = r.Matches(entries[i]);
-                    if (matches.Count == 0)
-                        continue;
-                    hk.DeviceId = new Guid(matches[0].ToString());
+                        var r = new Regex(ConfigurationSettings.GUID_REGEX);
+                        var matches = r.Matches(entries[i]);
+                        if (matches.Count == 0)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"No GUID match found in: {entries[i]}");
+                            continue;
+                        }
+                        hk.DeviceId = new Guid(matches[0].ToString());
 
-                    hk.Modifiers = (Modifiers)modifiers;
-                    hk.Key = (Keys)key;
-                    _hotkeys.Add(hk);
-                    hk.HotKeyPressed += hk_HotKeyPressed;
-                    hk.RegisterHotkey();
+                        hk.Modifiers = (Modifiers)modifiers;
+                        hk.Key = (Keys)key;
+                        _hotkeys.Add(hk);
+                        hk.HotKeyPressed += hk_HotKeyPressed;
+                        hk.RegisterHotkey();
+                        
+                        System.Diagnostics.Debug.WriteLine($"Loaded hotkey: Key={hk.Key}, Modifiers={hk.Modifiers}, DeviceId={hk.DeviceId}");
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Error loading hotkey entry: {ex.Message}");
+                    }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                Program.Settings.HotKeys = "";
+                System.Diagnostics.Debug.WriteLine($"Critical error loading hotkeys: {ex.Message}");
+                // Don't clear settings on error
+                //Program.Settings.HotKeys = "";
             }
         }
 
@@ -86,14 +103,43 @@ namespace FortyOne.AudioSwitcher.HotKeyData
 
         public static void SaveHotKeys()
         {
-            var hotkeydata = "";
-            foreach (var hk in _hotkeys)
+            try 
             {
-                hotkeydata += "[" + (int)hk.Key + "," + (int)hk.Modifiers + "," + hk.DeviceId + "]";
+                var hotkeydata = "";
+                foreach (var hk in _hotkeys)
+                {
+                    // Validate the hotkey before saving
+                    if (hk.Key == Keys.None || hk.DeviceId == Guid.Empty)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Skipping invalid hotkey: Key={hk.Key}, DeviceId={hk.DeviceId}");
+                        continue;
+                    }
+                    
+                    hotkeydata += "[" + (int)hk.Key + "," + (int)hk.Modifiers + "," + hk.DeviceId + "]";
+                }
+                
+                System.Diagnostics.Debug.WriteLine($"Saving hotkeys: {hotkeydata}");
+                
+                // Only save if we have data to save
+                if (string.IsNullOrEmpty(hotkeydata))
+                    hotkeydata = "[]"; // Save empty array instead of empty string
+                    
+                Program.Settings.HotKeys = hotkeydata;
+                
+                // Verify the save worked by reading it back
+                var savedData = Program.Settings.HotKeys;
+                if (savedData != hotkeydata)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Warning: Saved hotkey data doesn't match. Expected: {hotkeydata}, Got: {savedData}");
+                }
+                
+                RefreshHotkeys();
             }
-            Program.Settings.HotKeys = hotkeydata;
-
-            RefreshHotkeys();
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error saving hotkeys: {ex.Message}");
+                throw; // Re-throw to notify the UI layer
+            }
         }
 
         public static bool AddHotKey(HotKey hk)
