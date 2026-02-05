@@ -117,6 +117,8 @@
             this.deviceNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.hotKeyStringDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.hotKeyBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.statusLabelDonate = new System.Windows.Forms.ToolStripStatusLabel();
+            this.btnTestError = new System.Windows.Forms.Button();
             this.playbackStrip.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tapPlayback.SuspendLayout();
@@ -738,6 +740,7 @@
             this.tapAbout.Controls.Add(this.label6);
             this.tapAbout.Controls.Add(this.linkLabel1);
             this.tapAbout.Controls.Add(this.label4);
+            this.tapAbout.Controls.Add(this.btnTestError);
             this.tapAbout.Controls.Add(this.label2);
             this.tapAbout.Controls.Add(this.lblCopyright);
             this.tapAbout.Controls.Add(this.lblVersion);
@@ -980,7 +983,8 @@
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusLabelUpdate,
-            this.toolStripStatusLabel1});
+            this.toolStripStatusLabel1,
+            this.statusLabelDonate});
             this.statusStrip1.Location = new System.Drawing.Point(2, 728);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.ShowItemToolTips = true;
@@ -1061,6 +1065,33 @@
             // hotKeyBindingSource
             // 
             this.hotKeyBindingSource.DataSource = typeof(FortyOne.AudioSwitcher.HotKeyData.HotKey);
+            // 
+            // statusLabelDonate
+            // 
+            this.statusLabelDonate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.statusLabelDonate.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.statusLabelDonate.IsLink = true;
+            this.statusLabelDonate.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
+            this.statusLabelDonate.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.statusLabelDonate.Margin = new System.Windows.Forms.Padding(0, 0, 0, 2);
+            this.statusLabelDonate.Name = "statusLabelDonate";
+            this.statusLabelDonate.Size = new System.Drawing.Size(70, 25);
+            this.statusLabelDonate.Text = "Donate";
+            this.statusLabelDonate.ToolTipText = "Donate via PayPal";
+            this.statusLabelDonate.Click += new System.EventHandler(this.statusLabelDonate_Click);
+            // 
+            // btnTestError
+            // 
+            this.btnTestError.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnTestError.Location = new System.Drawing.Point(295, 6);
+            this.btnTestError.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnTestError.Name = "btnTestError";
+            this.btnTestError.Size = new System.Drawing.Size(149, 43);
+            this.btnTestError.TabIndex = 6;
+            this.btnTestError.Text = "Test Error";
+            this.btnTestError.UseVisualStyleBackColor = true;
+            this.btnTestError.Visible = false;
+            this.btnTestError.Click += new System.EventHandler(this.button1_Click);
             // 
             // AudioSwitcher
             // 
@@ -1201,6 +1232,8 @@
         private System.Windows.Forms.ToolStripMenuItem mnuChangeRecordingIcon;
         private System.Windows.Forms.ToolStripMenuItem mnuResetRecordingIcon;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.Button btnTestError;
+        private System.Windows.Forms.ToolStripStatusLabel statusLabelDonate;
     }
 }
 
