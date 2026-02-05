@@ -28,6 +28,7 @@ namespace FortyOne.AudioSwitcher.Configuration
         public const string SETTING_SHOWDISCONNECTEDDDEVICES = "ShowDisconnectedDevices";
         public const string SETTING_SHOWDPDEVICEIICONINTRAY = "ShowDPDeviceIconInTray";
         public const string SETTING_UPDATE_NOTIFICATIONS_ENABLED = "UpdateNotificationsEnabled";
+        public const string SETTING_CUSTOMDEVICEICONS = "CustomDeviceIcons";
         private readonly ISettingsSource _configWriter;
 
         public ConfigurationSettings(ISettingsSource source)
@@ -251,6 +252,12 @@ namespace FortyOne.AudioSwitcher.Configuration
             set { _configWriter.Set(SETTING_UPDATE_NOTIFICATIONS_ENABLED, value.ToString()); }
         }
 
+        public string CustomDeviceIcons
+        {
+            get { return SettingExists(SETTING_CUSTOMDEVICEICONS) ? _configWriter.Get(SETTING_CUSTOMDEVICEICONS) : "{}"; }
+            set { _configWriter.Set(SETTING_CUSTOMDEVICEICONS, value); }
+        }
+
         public void CreateDefaults()
         {
             if (!SettingExists(SETTING_CLOSETOTRAY))
@@ -314,6 +321,9 @@ namespace FortyOne.AudioSwitcher.Configuration
 
             if (!SettingExists(SETTING_UPDATE_NOTIFICATIONS_ENABLED))
                 UpdateNotificationsEnabled = PollForUpdates > 0;
+
+            if (!SettingExists(SETTING_CUSTOMDEVICEICONS))
+                CustomDeviceIcons = "{}";
         }
 
         public void LoadFrom(ConfigurationSettings otherSettings)
@@ -336,6 +346,7 @@ namespace FortyOne.AudioSwitcher.Configuration
             StartupRecordingDeviceID = otherSettings.StartupRecordingDeviceID;
             WindowHeight = otherSettings.WindowHeight;
             WindowWidth = otherSettings.WindowWidth;
+            CustomDeviceIcons = otherSettings.CustomDeviceIcons;
         }
 
         public bool SettingExists(string name)

@@ -52,7 +52,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Resources\Music_Note_Double.ico</ApplicationIcon>
@@ -74,10 +74,9 @@
     <DebugSymbols>false</DebugSymbols>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <Prefer32Bit>false</Prefer32Bit>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>fortyone.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup />
@@ -219,7 +218,7 @@
     <None Include="Icons\twitter.png" />
     <Content Include="Resources\112_Plus_Green_16x16_72.png" />
     <Content Include="Resources\112_RefreshArrow_Green_16x16_72.png" />
-    <None Include="fortyone.snk" />
+<!-- Removed signing file -->
     <None Include="Resources\AutoUpdater.exe" />
     <Content Include="Resources\btn_donateCC_LG.png" />
     <Content Include="Resources\delete.png" />
@@ -227,7 +226,7 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="fortyone.pfx" />
+<!-- Removed signing file -->
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using fastJSON;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -898,12 +899,16 @@ namespace FortyOne.AudioSwitcher
                         imageMod += "c";
                     }
 
-                    var imageToGen = imageKey + imageMod;
+                    var customIconPath = GetCustomIconPath(ad.Id);
+                    var imageToGen = (customIconPath != null ? ad.Id.ToString() : imageKey) + imageMod;
+
+                    if (customIconPath != null && imageList1.Images.Keys.Contains(imageToGen))
+                        imageList1.Images.RemoveByKey(imageToGen);
 
                     if (!imageList1.Images.Keys.Contains(imageToGen))
                     {
                         Image i;
-                        using (var icon = ExtractIconFromPath(ad.IconPath))
+                        using (var icon = ExtractIconFromPath(customIconPath ?? ad.IconPath))
                         {
                             i = icon.ToBitmap();
                         }
@@ -1031,12 +1036,16 @@ namespace FortyOne.AudioSwitcher
                         imageMod += "c";
                     }
 
-                    var imageToGen = imageKey + imageMod;
+                    var customIconPath = GetCustomIconPath(ad.Id);
+                    var imageToGen = (customIconPath != null ? ad.Id.ToString() : imageKey) + imageMod;
+
+                    if (customIconPath != null && imageList1.Images.Keys.Contains(imageToGen))
+                        imageList1.Images.RemoveByKey(imageToGen);
 
                     if (!imageList1.Images.Keys.Contains(imageToGen))
                     {
                         Image i;
-                        using (var icon = ExtractIconFromPath(ad.IconPath))
+                        using (var icon = ExtractIconFromPath(customIconPath ?? ad.IconPath))
                         {
                             i = icon.ToBitmap();
                         }
@@ -1082,6 +1091,11 @@ namespace FortyOne.AudioSwitcher
 
         private void RefreshNotifyIconItems()
         {
+            foreach (ToolStripItem item in notifyIconStrip.Items)
+            {
+                if (item.Image != null)
+                    item.Image.Dispose();
+            }
             notifyIconStrip.Items.Clear();
 
             var playbackCount = 0;
@@ -1098,7 +1112,8 @@ namespace FortyOne.AudioSwitcher
                 {
                     Text = ad.FullName,
                     Tag = ad,
-                    Checked = ad.IsDefaultDevice
+                    Checked = ad.IsDefaultDevice,
+                    Image = ExtractIconFromPath(GetCustomIconPath(ad.Id) ?? ad.IconPath).ToBitmap()
                 };
 
                 notifyIconStrip.Items.Add(item);
@@ -1119,7 +1134,8 @@ namespace FortyOne.AudioSwitcher
                 {
                     Text = ad.FullName,
                     Tag = ad,
-                    Checked = ad.IsDefaultDevice
+                    Checked = ad.IsDefaultDevice,
+                    Image = ExtractIconFromPath(GetCustomIconPath(ad.Id) ?? ad.IconPath).ToBitmap()
                 };
 
                 notifyIconStrip.Items.Add(item);
@@ -1162,7 +1178,7 @@ namespace FortyOne.AudioSwitcher
             var oldIcon = notifyIcon1.Icon;
 
             if (defaultDevice != null && Program.Settings.ShowDPDeviceIconInTray)
-                notifyIcon1.Icon = ExtractIconFromPath(defaultDevice.IconPath);
+                notifyIcon1.Icon = ExtractIconFromPath(GetCustomIconPath(defaultDevice.Id) ?? defaultDevice.IconPath);
             else
                 notifyIcon1.Icon = _originalTrayIcon;
 
@@ -1526,5 +1542,82 @@ namespace FortyOne.AudioSwitcher
 				}));
 			}
 		}
+
+        private string GetCustomIconPath(Guid id)
+        {
+            try
+            {
+                var dict = JSON.ToObject<Dictionary<string, string>>(Program.Settings.CustomDeviceIcons);
+                if (dict.ContainsKey(id.ToString()))
+                    return dict[id.ToString()];
+            }
+            catch { }
+            return null;
+        }
+
+        private void SetCustomIconPath(Guid id, string path)
+        {
+            try
+            {
+                var dict = JSON.ToObject<Dictionary<string, string>>(Program.Settings.CustomDeviceIcons) ?? new Dictionary<string, string>();
+                dict[id.ToString()] = path;
+                Program.Settings.CustomDeviceIcons = JSON.ToJSON(dict);
+            }
+            catch { }
+        }
+
+        private void ResetCustomIconPath(Guid id)
+        {
+            try
+            {
+                var dict = JSON.ToObject<Dictionary<string, string>>(Program.Settings.CustomDeviceIcons);
+                if (dict != null && dict.ContainsKey(id.ToString()))
+                {
+                    dict.Remove(id.ToString());
+                    Program.Settings.CustomDeviceIcons = JSON.ToJSON(dict);
+                }
+            }
+            catch { }
+        }
+
+        private void mnuChangePlaybackIcon_Click(object sender, EventArgs e)
+        {
+            if (SelectedPlaybackDevice == null) return;
+            using (var ofd = new OpenFileDialog { Filter = "Icon Files (*.ico)|*.ico|All Files (*.*)|*.*", Title = "Select Icon for " + SelectedPlaybackDevice.Name })
+            {
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    SetCustomIconPath(SelectedPlaybackDevice.Id, ofd.FileName);
+                    RefreshPlaybackDevices();
+                }
+            }
+        }
+
+        private void mnuResetPlaybackIcon_Click(object sender, EventArgs e)
+        {
+            if (SelectedPlaybackDevice == null) return;
+            ResetCustomIconPath(SelectedPlaybackDevice.Id);
+            RefreshPlaybackDevices();
+        }
+
+        private void mnuChangeRecordingIcon_Click(object sender, EventArgs e)
+        {
+            if (SelectedRecordingDevice == null) return;
+            using (var ofd = new OpenFileDialog { Filter = "Icon Files (*.ico)|*.ico|All Files (*.*)|*.*", Title = "Select Icon for " + SelectedRecordingDevice.Name })
+            {
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    SetCustomIconPath(SelectedRecordingDevice.Id, ofd.FileName);
+                    RefreshRecordingDevices();
+                }
+            }
+        }
+
+        private void mnuResetRecordingIcon_Click(object sender, EventArgs e)
+        {
+            if (SelectedRecordingDevice == null) return;
+            ResetCustomIconPath(SelectedRecordingDevice.Id);
+            RefreshRecordingDevices();
+        }
 	}
 }
