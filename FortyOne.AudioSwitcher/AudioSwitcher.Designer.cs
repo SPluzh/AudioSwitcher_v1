@@ -102,6 +102,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.notifyIconStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.classicVolumeMixerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.preferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateAvailableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -947,6 +948,7 @@
             this.notifyIconStrip.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.notifyIconStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripSeparator1,
+            this.classicVolumeMixerToolStripMenuItem,
             this.preferencesToolStripMenuItem,
             this.updateAvailableToolStripMenuItem,
             this.exitToolStripMenuItem});
@@ -958,6 +960,13 @@
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(260, 6);
+            // 
+            // classicVolumeMixerToolStripMenuItem
+            // 
+            this.classicVolumeMixerToolStripMenuItem.Name = "classicVolumeMixerToolStripMenuItem";
+            this.classicVolumeMixerToolStripMenuItem.Size = new System.Drawing.Size(263, 32);
+            this.classicVolumeMixerToolStripMenuItem.Text = "Classic Volume Mixer";
+            this.classicVolumeMixerToolStripMenuItem.Click += new System.EventHandler(this.classicVolumeMixerToolStripMenuItem_Click);
             // 
             // preferencesToolStripMenuItem
             // 
@@ -1101,6 +1110,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TabPage tapSettings;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.ToolStripMenuItem classicVolumeMixerToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip notifyIconStrip;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;

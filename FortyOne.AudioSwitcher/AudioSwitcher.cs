@@ -1129,6 +1129,7 @@ namespace FortyOne.AudioSwitcher
             if (recordingCount > 0)
                 notifyIconStrip.Items.Add(new ToolStripSeparator());
 
+            notifyIconStrip.Items.Add(classicVolumeMixerToolStripMenuItem);
             notifyIconStrip.Items.Add(preferencesToolStripMenuItem);
 
             if (_updateAvailable)
@@ -1363,6 +1364,17 @@ namespace FortyOne.AudioSwitcher
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void classicVolumeMixerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Process.Start("sndvol.exe");
+            }
+            catch
+            {
+            }
         }
 
         private async void notifyIconStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
