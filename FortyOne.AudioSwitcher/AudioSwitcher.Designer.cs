@@ -73,6 +73,7 @@
             this.chkShowDisconnectedDevices = new System.Windows.Forms.CheckBox();
             this.chkShowDPDeviceIconInTray = new System.Windows.Forms.CheckBox();
             this.chkNotifyUpdates = new System.Windows.Forms.CheckBox();
+            this.chkDisableDblClick = new System.Windows.Forms.CheckBox();
             this.btnCheckUpdate = new System.Windows.Forms.Button();
             this.tapHotkeys = new System.Windows.Forms.TabPage();
             this.btnClearAll = new System.Windows.Forms.Button();
@@ -577,6 +578,18 @@
             this.chkNotifyUpdates.Text = "Tell me when there\'s an update";
             this.chkNotifyUpdates.UseVisualStyleBackColor = true;
             this.chkNotifyUpdates.CheckedChanged += new System.EventHandler(this.chkNotifyUpdates_CheckedChanged);
+            // 
+            // chkDisableDblClick
+            // 
+            this.chkDisableDblClick.AutoSize = true;
+            this.chkDisableDblClick.Location = new System.Drawing.Point(14, 269);
+            this.chkDisableDblClick.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.chkDisableDblClick.Name = "chkDisableDblClick";
+            this.chkDisableDblClick.Size = new System.Drawing.Size(352, 29);
+            this.chkDisableDblClick.TabIndex = 8;
+            this.chkDisableDblClick.Text = "Disable double click to open settings";
+            this.chkDisableDblClick.UseVisualStyleBackColor = true;
+            this.chkDisableDblClick.CheckedChanged += new System.EventHandler(this.chkDisableDblClick_CheckedChanged);
             // 
             // btnCheckUpdate
             // 
@@ -1152,7 +1165,9 @@
         private System.Windows.Forms.PictureBox openControlPanelPlayback;
         private System.Windows.Forms.PictureBox openControlPanelRecording;
 		private System.Windows.Forms.CheckBox chkShowUnknownDevicesInHotkeyList;
+        private System.Windows.Forms.CheckBox chkShowUnknownDevicesInHotkeyList;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.CheckBox chkDisableDblClick;
     }
 }
 
