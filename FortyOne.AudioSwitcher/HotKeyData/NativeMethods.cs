@@ -282,5 +282,12 @@ namespace FortyOne.AudioSwitcher.HotKeyData
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern int SendMessage(IntPtr hwnd, int wMsg, IntPtr wParam, IntPtr lParam);
+
+        // WIN key virtual codes
+        public const int VK_LWIN = 0x5B;
+        public const int VK_RWIN = 0x5C;
+
+        [DllImport("user32.dll")]
+        public static extern short GetAsyncKeyState(int vKey);
     }
 }

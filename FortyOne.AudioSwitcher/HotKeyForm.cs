@@ -108,6 +108,13 @@ namespace FortyOne.AudioSwitcher
             }
         }
 
+        private static bool IsWinKeyPressed()
+        {
+            bool isLeftWinPressed = (NativeMethods.GetAsyncKeyState(NativeMethods.VK_LWIN) & 0x8000) != 0;
+            bool isRightWinPressed = (NativeMethods.GetAsyncKeyState(NativeMethods.VK_RWIN) & 0x8000) != 0;
+            return isLeftWinPressed || isRightWinPressed;
+        }
+
         private void btnCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
@@ -117,7 +124,11 @@ namespace FortyOne.AudioSwitcher
 
         private void txtHotKey_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.ShiftKey || e.KeyCode == Keys.ControlKey || e.KeyCode == Keys.Menu)
+            if (e.KeyCode == Keys.ShiftKey || 
+                e.KeyCode == Keys.ControlKey || 
+                e.KeyCode == Keys.Menu || 
+                e.KeyCode == Keys.LWin || 
+                e.KeyCode == Keys.RWin)
                 return;
 
             _hotkey.Key = e.KeyCode;
@@ -132,7 +143,7 @@ namespace FortyOne.AudioSwitcher
             if (e.Shift)
                 _hotkey.Modifiers = _hotkey.Modifiers | Modifiers.Shift;
 
-            if (e.Modifiers == Keys.LWin || e.Modifiers == Keys.RWin)
+            if (IsWinKeyPressed())
                 _hotkey.Modifiers = _hotkey.Modifiers | Modifiers.Win;
 
             txtHotKey.Text = _hotkey.HotKeyString;
