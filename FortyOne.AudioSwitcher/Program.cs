@@ -14,12 +14,26 @@ namespace FortyOne.AudioSwitcher
 
         public static ConfigurationSettings Settings { get; private set; }
 
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern bool SetProcessDpiAwarenessContext(int dpiFlag);
+
+        private const int DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 = -4;
+
         /// <summary>
         ///     The main entry point for the application.
         /// </summary>
         [STAThread]
         private static void Main()
         {
+            if (Environment.OSVersion.Version.Major >= 6)
+            {
+                try
+                {
+                    SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+                }
+                catch { } // Fallback for older Windows versions or failures
+            }
+
             Application.ThreadException += WinFormExceptionHandler.OnThreadException;
             AppDomain.CurrentDomain.UnhandledException += WinFormExceptionHandler.OnUnhandledCLRException;
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);

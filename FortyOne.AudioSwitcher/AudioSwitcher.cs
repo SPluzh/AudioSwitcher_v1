@@ -254,6 +254,14 @@ namespace FortyOne.AudioSwitcher
         [DllImport("uxtheme.dll", ExactSpelling = true, CharSet = CharSet.Unicode)]
         private static extern int SetWindowTheme(IntPtr hwnd, string pszSubAppName, string pszSubIdList);
 
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+
+        [DllImport("user32.dll")]
+        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+
+
         private async void Form_Load()
         {
             int iconSize = 48;
@@ -445,6 +453,138 @@ namespace FortyOne.AudioSwitcher
                 t.Interval = SystemInformation.DoubleClickTime;
                 t.Start();
             }
+            else if (e.Button == MouseButtons.Right)
+            {
+                if (Program.Settings.FixTrayIconContextMenuPosition)
+                {
+                    ShowNotifyIconContextMenu();
+                }
+            }
+            else if (e.Button == MouseButtons.Middle)
+            {
+                if (Program.Settings.MiddleClickForVolumeMixer)
+                {
+                    OpenVolumeMixer();
+                }
+            }
+        }
+
+        private void OpenVolumeMixer()
+        {
+            var path = Environment.ExpandEnvironmentVariables("%windir%\\System32\\SndVol.exe");
+            if (File.Exists(path))
+            {
+                var process = Process.Start(path, "-r 88888888"); // -r 88888888 opens in tray mode
+                
+                if (process != null)
+                {
+                    // Move the window to the correct screen
+                    // This is a best-effort attempt, as SndVol behaves unpredictably
+                    var t = new Timer();
+                    t.Interval = 20; // Fast check
+                    int retries = 0;
+                    t.Tick += (s, args) =>
+                    {
+                        retries++;
+                        
+                        // Try to get handle
+                        var handle = process.MainWindowHandle;
+                        if (handle == IntPtr.Zero)
+                        {
+                            process.Refresh();
+                            handle = process.MainWindowHandle;
+                        }
+
+                        // Give up after a short while (~2 seconds)
+                        if (retries > 100)
+                        {
+                            ((Timer)s).Stop();
+                            ((Timer)s).Dispose();
+                            return;
+                        }
+
+                        if (handle != IntPtr.Zero)
+                        {
+                            RECT rect;
+                            if (GetWindowRect(handle, out rect))
+                            {
+                                int width = rect.Right - rect.Left;
+                                int height = rect.Bottom - rect.Top;
+
+                                var screen = Screen.FromPoint(Cursor.Position);
+                                var workingArea = screen.WorkingArea;
+
+                                // Center horizontally relative to cursor
+                                int x = Cursor.Position.X - (width / 2);
+                                // Position above cursor by default
+                                int y = Cursor.Position.Y - height - 15;
+
+                                // Horizontal Clamping
+                                if (x < workingArea.X) x = workingArea.X;
+                                else if (x + width > workingArea.Right) x = workingArea.Right - width;
+
+                                // Vertical Logic
+                                if (y < workingArea.Y)
+                                {
+                                    y = Cursor.Position.Y + 15;
+                                    if (y + height > workingArea.Bottom)
+                                    {
+                                         y = workingArea.Bottom - height;
+                                    }
+                                    if (y < workingArea.Y) y = workingArea.Y;
+                                }
+                                else 
+                                {
+                                    if (y + height > workingArea.Bottom) y = workingArea.Bottom - height;
+                                }
+
+                                if (Program.Settings.MoveVolumeMixerToCursor)
+                                {
+                                    SetWindowPos(handle, IntPtr.Zero, x, y, 0, 0, 0x0001 | 0x0004); // SWP_NOSIZE | SWP_NOZORDER
+                                }
+                                
+                                SetForegroundWindow(handle);
+                            }
+                            ((Timer)s).Stop();
+                            ((Timer)s).Dispose();
+                        }
+                    };
+                    t.Start();
+                }
+            }
+        }
+
+        private void ShowNotifyIconContextMenu()
+        {
+            RefreshNotifyIconItems();
+            
+            // Helper form to ensure menu appears on the correct screen (where the cursor/tray icon is)
+            var f = new Form
+            {
+                Size = new Size(1, 1),
+                StartPosition = FormStartPosition.Manual,
+                Location = Cursor.Position,
+                FormBorderStyle = FormBorderStyle.None,
+                ShowInTaskbar = false,
+                Opacity = 0,
+                TopMost = true
+            };
+
+            // Clean up the form when the menu closes
+            ToolStripDropDownClosedEventHandler handler = null;
+            handler = (s, args) =>
+            {
+                notifyIconStrip.Closed -= handler;
+                f.Dispose();
+            };
+            notifyIconStrip.Closed += handler;
+
+            f.Show();
+            f.Activate();
+            SetForegroundWindow(f.Handle);
+            
+            // Show menu relative to the helper form (positioned at cursor)
+            notifyIconStrip.Show(f, new Point(0, 0));
         }
 
         private async void t_Tick(object sender, EventArgs e)
@@ -505,9 +645,34 @@ namespace FortyOne.AudioSwitcher
             else
             {
                 RefreshNotifyIconItems();
-                var mi = typeof(NotifyIcon).GetMethod("ShowContextMenu",
-                    BindingFlags.Instance | BindingFlags.NonPublic);
-                mi.Invoke(notifyIcon1, null);
+                
+                // Helper form to ensure menu appears on the correct screen
+                var f = new Form
+                {
+                    Size = new Size(1, 1),
+                    StartPosition = FormStartPosition.Manual,
+                    Location = Cursor.Position,
+                    FormBorderStyle = FormBorderStyle.None,
+                    ShowInTaskbar = false,
+                    Opacity = 0,
+                    TopMost = true
+                };
+
+                // Clean up the form when the menu closes
+                ToolStripDropDownClosedEventHandler handler = null;
+                handler = (s, args) =>
+                {
+                    notifyIconStrip.Closed -= handler;
+                    f.Dispose();
+                };
+                notifyIconStrip.Closed += handler;
+
+                f.Show();
+                f.Activate();
+                SetForegroundWindow(f.Handle);
+                
+                // Show relative to the helper form
+                notifyIconStrip.Show(f, new Point(0, 0));
             }
         }
 
@@ -725,6 +890,34 @@ namespace FortyOne.AudioSwitcher
             RefreshTrayIcon();
         }
 
+        private void chkMiddleClickForVolumeMixer_CheckedChanged(object sender, EventArgs e)
+        {
+            Program.Settings.MiddleClickForVolumeMixer = chkMiddleClickForVolumeMixer.Checked;
+        }
+
+        private void chkFixTrayIconContextMenuPosition_CheckedChanged(object sender, EventArgs e)
+        {
+            Program.Settings.FixTrayIconContextMenuPosition = chkFixTrayIconContextMenuPosition.Checked;
+            ApplyContextMenuBehavior();
+        }
+
+        private void chkMoveVolumeMixerToCursor_CheckedChanged(object sender, EventArgs e)
+        {
+            Program.Settings.MoveVolumeMixerToCursor = chkMoveVolumeMixerToCursor.Checked;
+        }
+
+        private void ApplyContextMenuBehavior()
+        {
+            if (Program.Settings.FixTrayIconContextMenuPosition)
+            {
+                notifyIcon1.ContextMenuStrip = null;
+            }
+            else
+            {
+                notifyIcon1.ContextMenuStrip = notifyIconStrip;
+            }
+        }
+
         private void preferencesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Show();
@@ -802,6 +995,11 @@ namespace FortyOne.AudioSwitcher
 	        chkShowUnknownDevicesInHotkeyList.Checked = Program.Settings.ShowUnknownDevicesInHotkeyList;
             chkShowDisconnectedDevices.Checked = Program.Settings.ShowDisconnectedDevices;
             chkShowDPDeviceIconInTray.Checked = Program.Settings.ShowDPDeviceIconInTray;
+            chkMiddleClickForVolumeMixer.Checked = Program.Settings.MiddleClickForVolumeMixer;
+            chkFixTrayIconContextMenuPosition.Checked = Program.Settings.FixTrayIconContextMenuPosition;
+            chkMoveVolumeMixerToCursor.Checked = Program.Settings.MoveVolumeMixerToCursor;
+            
+            ApplyContextMenuBehavior();
 
             Width = Program.Settings.WindowWidth;
             Height = Program.Settings.WindowHeight;
@@ -1382,11 +1580,92 @@ namespace FortyOne.AudioSwitcher
             Application.Exit();
         }
 
+        [DllImport("user32.dll", SetLastError = true)]
+        internal static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        internal static extern bool GetWindowRect(IntPtr hwnd, out RECT lpRect);
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RECT
+        {
+            public int Left;
+            public int Top;
+            public int Right;
+            public int Bottom;
+        }
+
         private void classicVolumeMixerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
-                Process.Start("sndvol.exe");
+                var mousePosition = Cursor.Position;
+                var p = Process.Start("sndvol.exe");
+
+                if (p != null)
+                {
+                    Task.Run(async () =>
+                    {
+                        try
+                        {
+                            // Wait for the process to be ready
+                            p.WaitForInputIdle(2000);
+
+                            // Simple retry loop to get the main window handle
+                            int retries = 0;
+                            while (p.MainWindowHandle == IntPtr.Zero && retries < 10)
+                            {
+                                await Task.Delay(100);
+                                p.Refresh();
+                                retries++;
+                            }
+
+                            if (p.MainWindowHandle != IntPtr.Zero)
+                            {
+                                RECT rect;
+                                if (GetWindowRect(p.MainWindowHandle, out rect))
+                                {
+                                    var width = rect.Right - rect.Left;
+                                    var height = rect.Bottom - rect.Top;
+
+                                    // Default to cursor position
+                                    var x = mousePosition.X - (width / 2);
+                                    var y = mousePosition.Y - height - 10; // Slightly above cursor
+
+                                    // Adjust for screen bounds
+                                    var screen = Screen.FromPoint(mousePosition);
+                                    var workingArea = screen.WorkingArea;
+
+                                    // Ensure it's not off the right/left
+                                    if (x + width > workingArea.Right)
+                                        x = workingArea.Right - width;
+                                    if (x < workingArea.Left)
+                                        x = workingArea.Left;
+
+                                    // Ensure it's not off top/bottom
+                                    // If taskbar is at bottom, Y is fine (above cursor).
+                                    // If cursor is at bottom of screen, Y might be OK.
+                                    // Let's just ensure it fits in Y.
+                                    if (y + height > workingArea.Bottom)
+                                        y = workingArea.Bottom - height;
+                                    if (y < workingArea.Top)
+                                        y = workingArea.Top; // If it would go off top, push it down
+
+                                    // Move the window
+                                    Invoke((Action)(() =>
+                                    {
+                                         MoveWindow(p.MainWindowHandle, x, y, width, height, true);
+                                         SetForegroundWindow(p.MainWindowHandle);
+                                    }));
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            // Swallow exceptions in the async positioning task to avoid crashing the app
+                        }
+                    });
+                }
             }
             catch
             {

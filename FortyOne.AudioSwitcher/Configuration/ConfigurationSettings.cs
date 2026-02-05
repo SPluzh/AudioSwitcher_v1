@@ -28,6 +28,9 @@ namespace FortyOne.AudioSwitcher.Configuration
         public const string SETTING_SHOWDISCONNECTEDDDEVICES = "ShowDisconnectedDevices";
         public const string SETTING_SHOWDPDEVICEIICONINTRAY = "ShowDPDeviceIconInTray";
         public const string SETTING_UPDATE_NOTIFICATIONS_ENABLED = "UpdateNotificationsEnabled";
+        public const string SETTING_MIDDLECLICKFORVOLUMEMIXER = "MiddleClickForVolumeMixer";
+        public const string SETTING_FIX_TRAY_ICON_CONTEXT_MENU_POSITION = "FixTrayIconContextMenuPosition";
+        public const string SETTING_MOVE_VOLUME_MIXER_TO_CURSOR = "MoveVolumeMixerToCursor";
         public const string SETTING_CUSTOMDEVICEICONS = "CustomDeviceIcons";
         private readonly ISettingsSource _configWriter;
 
@@ -252,6 +255,35 @@ namespace FortyOne.AudioSwitcher.Configuration
             set { _configWriter.Set(SETTING_UPDATE_NOTIFICATIONS_ENABLED, value.ToString()); }
         }
 
+        public bool MiddleClickForVolumeMixer
+        {
+            get
+            {
+                return
+                    Convert.ToBoolean(_configWriter.Get(SETTING_MIDDLECLICKFORVOLUMEMIXER));
+            }
+            set { _configWriter.Set(SETTING_MIDDLECLICKFORVOLUMEMIXER, value.ToString()); }
+        }
+
+        public bool FixTrayIconContextMenuPosition
+        {
+            get
+            {
+                return
+                    Convert.ToBoolean(_configWriter.Get(SETTING_FIX_TRAY_ICON_CONTEXT_MENU_POSITION));
+            }
+            set { _configWriter.Set(SETTING_FIX_TRAY_ICON_CONTEXT_MENU_POSITION, value.ToString()); }
+        }
+
+        public bool MoveVolumeMixerToCursor
+        {
+            get
+            {
+                return Convert.ToBoolean(_configWriter.Get(SETTING_MOVE_VOLUME_MIXER_TO_CURSOR));
+            }
+            set { _configWriter.Set(SETTING_MOVE_VOLUME_MIXER_TO_CURSOR, value.ToString()); }
+        }
+
         public string CustomDeviceIcons
         {
             get { return SettingExists(SETTING_CUSTOMDEVICEICONS) ? _configWriter.Get(SETTING_CUSTOMDEVICEICONS) : "{}"; }
@@ -322,6 +354,15 @@ namespace FortyOne.AudioSwitcher.Configuration
             if (!SettingExists(SETTING_UPDATE_NOTIFICATIONS_ENABLED))
                 UpdateNotificationsEnabled = PollForUpdates > 0;
 
+            if (!SettingExists(SETTING_MIDDLECLICKFORVOLUMEMIXER))
+                MiddleClickForVolumeMixer = false;
+
+            if (!SettingExists(SETTING_FIX_TRAY_ICON_CONTEXT_MENU_POSITION))
+                FixTrayIconContextMenuPosition = true;
+
+            if (!SettingExists(SETTING_MOVE_VOLUME_MIXER_TO_CURSOR))
+                MoveVolumeMixerToCursor = true;
+
             if (!SettingExists(SETTING_CUSTOMDEVICEICONS))
                 CustomDeviceIcons = "{}";
         }
@@ -346,6 +387,9 @@ namespace FortyOne.AudioSwitcher.Configuration
             StartupRecordingDeviceID = otherSettings.StartupRecordingDeviceID;
             WindowHeight = otherSettings.WindowHeight;
             WindowWidth = otherSettings.WindowWidth;
+            MiddleClickForVolumeMixer = otherSettings.MiddleClickForVolumeMixer;
+            FixTrayIconContextMenuPosition = otherSettings.FixTrayIconContextMenuPosition;
+            MoveVolumeMixerToCursor = otherSettings.MoveVolumeMixerToCursor;
             CustomDeviceIcons = otherSettings.CustomDeviceIcons;
         }
 

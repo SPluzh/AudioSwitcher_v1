@@ -78,6 +78,9 @@
             this.chkShowDPDeviceIconInTray = new System.Windows.Forms.CheckBox();
             this.chkNotifyUpdates = new System.Windows.Forms.CheckBox();
             this.chkDisableDblClick = new System.Windows.Forms.CheckBox();
+            this.chkMiddleClickForVolumeMixer = new System.Windows.Forms.CheckBox();
+            this.chkFixTrayIconContextMenuPosition = new System.Windows.Forms.CheckBox();
+            this.chkMoveVolumeMixerToCursor = new System.Windows.Forms.CheckBox();
             this.btnCheckUpdate = new System.Windows.Forms.Button();
             this.tapHotkeys = new System.Windows.Forms.TabPage();
             this.btnClearAll = new System.Windows.Forms.Button();
@@ -96,6 +99,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.label4 = new System.Windows.Forms.Label();
+            this.btnTestError = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.lblCopyright = new System.Windows.Forms.Label();
             this.lblVersion = new System.Windows.Forms.Label();
@@ -112,13 +116,12 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusLabelUpdate = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusLabelDonate = new System.Windows.Forms.ToolStripStatusLabel();
             this.btnSetPlaybackDefault = new FortyOne.AudioSwitcher.Controls.SplitButton();
             this.btnSetRecordingDefault = new FortyOne.AudioSwitcher.Controls.SplitButton();
             this.deviceNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.hotKeyStringDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.hotKeyBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.statusLabelDonate = new System.Windows.Forms.ToolStripStatusLabel();
-            this.btnTestError = new System.Windows.Forms.Button();
             this.playbackStrip.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tapPlayback.SuspendLayout();
@@ -456,6 +459,9 @@
             this.flowLayoutPanel1.Controls.Add(this.chkShowDPDeviceIconInTray);
             this.flowLayoutPanel1.Controls.Add(this.chkNotifyUpdates);
             this.flowLayoutPanel1.Controls.Add(this.chkDisableDblClick);
+            this.flowLayoutPanel1.Controls.Add(this.chkMiddleClickForVolumeMixer);
+            this.flowLayoutPanel1.Controls.Add(this.chkFixTrayIconContextMenuPosition);
+            this.flowLayoutPanel1.Controls.Add(this.chkMoveVolumeMixerToCursor);
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 6);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -550,6 +556,7 @@
             this.chkShowDiabledDevices.Size = new System.Drawing.Size(213, 24);
             this.chkShowDiabledDevices.TabIndex = 12;
             this.chkShowDiabledDevices.Text = "Show Disabled Devices";
+            this.toolTip1.SetToolTip(this.chkShowDiabledDevices, "Shows disabled audio devices in the list");
             this.chkShowDiabledDevices.UseVisualStyleBackColor = true;
             this.chkShowDiabledDevices.CheckedChanged += new System.EventHandler(this.chkShowDiabledDevices_CheckedChanged);
             // 
@@ -562,6 +569,7 @@
             this.chkShowUnknownDevicesInHotkeyList.Size = new System.Drawing.Size(323, 24);
             this.chkShowUnknownDevicesInHotkeyList.TabIndex = 16;
             this.chkShowUnknownDevicesInHotkeyList.Text = "Show Unknown Devices In Hotkey List";
+            this.toolTip1.SetToolTip(this.chkShowUnknownDevicesInHotkeyList, "Shows devices with unknown status in the hotkey configuration list");
             this.chkShowUnknownDevicesInHotkeyList.UseVisualStyleBackColor = true;
             this.chkShowUnknownDevicesInHotkeyList.CheckedChanged += new System.EventHandler(this.chkShowUnknownDevicesInHotkeyList_CheckedChanged);
             // 
@@ -574,6 +582,7 @@
             this.chkShowDisconnectedDevices.Size = new System.Drawing.Size(250, 24);
             this.chkShowDisconnectedDevices.TabIndex = 13;
             this.chkShowDisconnectedDevices.Text = "Show Disconnected Devices";
+            this.toolTip1.SetToolTip(this.chkShowDisconnectedDevices, "Shows disconnected audio devices in the list");
             this.chkShowDisconnectedDevices.UseVisualStyleBackColor = true;
             this.chkShowDisconnectedDevices.CheckedChanged += new System.EventHandler(this.chkShowDisconnectedDevices_CheckedChanged);
             // 
@@ -586,6 +595,7 @@
             this.chkShowDPDeviceIconInTray.Size = new System.Drawing.Size(351, 24);
             this.chkShowDPDeviceIconInTray.TabIndex = 14;
             this.chkShowDPDeviceIconInTray.Text = "Show Default Playback Device icon in tray";
+            this.toolTip1.SetToolTip(this.chkShowDPDeviceIconInTray, "Shows the icon of the current default playback device in the system tray");
             this.chkShowDPDeviceIconInTray.UseVisualStyleBackColor = true;
             this.chkShowDPDeviceIconInTray.CheckedChanged += new System.EventHandler(this.chkShowDPDeviceIconInTray_CheckedChanged);
             // 
@@ -598,6 +608,7 @@
             this.chkNotifyUpdates.Size = new System.Drawing.Size(268, 24);
             this.chkNotifyUpdates.TabIndex = 15;
             this.chkNotifyUpdates.Text = "Tell me when there\'s an update";
+            this.toolTip1.SetToolTip(this.chkNotifyUpdates, "Notifies you when a new version of Audio Switcher is available");
             this.chkNotifyUpdates.UseVisualStyleBackColor = true;
             this.chkNotifyUpdates.CheckedChanged += new System.EventHandler(this.chkNotifyUpdates_CheckedChanged);
             // 
@@ -610,8 +621,48 @@
             this.chkDisableDblClick.Size = new System.Drawing.Size(309, 24);
             this.chkDisableDblClick.TabIndex = 8;
             this.chkDisableDblClick.Text = "Disable double click to open settings";
+            this.toolTip1.SetToolTip(this.chkDisableDblClick, "Disables opening the settings window when double-clicking the tray icon");
             this.chkDisableDblClick.UseVisualStyleBackColor = true;
             this.chkDisableDblClick.CheckedChanged += new System.EventHandler(this.chkDisableDblClick_CheckedChanged);
+            // 
+            // chkMiddleClickForVolumeMixer
+            // 
+            this.chkMiddleClickForVolumeMixer.AutoSize = true;
+            this.chkMiddleClickForVolumeMixer.Location = new System.Drawing.Point(2, 363);
+            this.chkMiddleClickForVolumeMixer.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.chkMiddleClickForVolumeMixer.Name = "chkMiddleClickForVolumeMixer";
+            this.chkMiddleClickForVolumeMixer.Size = new System.Drawing.Size(290, 24);
+            this.chkMiddleClickForVolumeMixer.TabIndex = 9;
+            this.chkMiddleClickForVolumeMixer.Text = "Middle click to open Volume Mixer";
+            this.toolTip1.SetToolTip(this.chkMiddleClickForVolumeMixer, "Opens the classic Volume Mixer when you middle click the tray icon");
+            this.chkMiddleClickForVolumeMixer.UseVisualStyleBackColor = true;
+            this.chkMiddleClickForVolumeMixer.CheckedChanged += new System.EventHandler(this.chkMiddleClickForVolumeMixer_CheckedChanged);
+            // 
+            // chkFixTrayIconContextMenuPosition
+            // 
+            this.chkFixTrayIconContextMenuPosition.AutoSize = true;
+            this.chkFixTrayIconContextMenuPosition.Location = new System.Drawing.Point(2, 393);
+            this.chkFixTrayIconContextMenuPosition.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.chkFixTrayIconContextMenuPosition.Name = "chkFixTrayIconContextMenuPosition";
+            this.chkFixTrayIconContextMenuPosition.Size = new System.Drawing.Size(268, 24);
+            this.chkFixTrayIconContextMenuPosition.TabIndex = 10;
+            this.chkFixTrayIconContextMenuPosition.Text = "Fix context menu position";
+            this.toolTip1.SetToolTip(this.chkFixTrayIconContextMenuPosition, "Fixes the position of the context menu on multi-monitor setups");
+            this.chkFixTrayIconContextMenuPosition.UseVisualStyleBackColor = true;
+            this.chkFixTrayIconContextMenuPosition.CheckedChanged += new System.EventHandler(this.chkFixTrayIconContextMenuPosition_CheckedChanged);
+            // 
+            // chkMoveVolumeMixerToCursor
+            // 
+            this.chkMoveVolumeMixerToCursor.AutoSize = true;
+            this.chkMoveVolumeMixerToCursor.Location = new System.Drawing.Point(2, 423);
+            this.chkMoveVolumeMixerToCursor.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.chkMoveVolumeMixerToCursor.Name = "chkMoveVolumeMixerToCursor";
+            this.chkMoveVolumeMixerToCursor.Size = new System.Drawing.Size(268, 24);
+            this.chkMoveVolumeMixerToCursor.TabIndex = 11;
+            this.chkMoveVolumeMixerToCursor.Text = "Move Volume Mixer to cursor";
+            this.toolTip1.SetToolTip(this.chkMoveVolumeMixerToCursor, "Moves the Volume Mixer window to the cursor position when opened");
+            this.chkMoveVolumeMixerToCursor.UseVisualStyleBackColor = true;
+            this.chkMoveVolumeMixerToCursor.CheckedChanged += new System.EventHandler(this.chkMoveVolumeMixerToCursor_CheckedChanged);
             // 
             // btnCheckUpdate
             // 
@@ -872,6 +923,19 @@
             this.label4.TabIndex = 11;
             this.label4.Text = "Click            for all versions of AudioSwitcher";
             // 
+            // btnTestError
+            // 
+            this.btnTestError.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnTestError.Location = new System.Drawing.Point(295, 6);
+            this.btnTestError.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.btnTestError.Name = "btnTestError";
+            this.btnTestError.Size = new System.Drawing.Size(149, 43);
+            this.btnTestError.TabIndex = 6;
+            this.btnTestError.Text = "Test Error";
+            this.btnTestError.UseVisualStyleBackColor = true;
+            this.btnTestError.Visible = false;
+            this.btnTestError.Click += new System.EventHandler(this.button1_Click);
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -917,7 +981,6 @@
             // 
             // notifyIcon1
             // 
-            this.notifyIcon1.ContextMenuStrip = this.notifyIconStrip;
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
             this.notifyIcon1.Text = "Audio Switcher";
             this.notifyIcon1.Visible = true;
@@ -1001,15 +1064,29 @@
             this.statusLabelUpdate.LinkColor = System.Drawing.Color.Red;
             this.statusLabelUpdate.Margin = new System.Windows.Forms.Padding(0, 0, 0, 2);
             this.statusLabelUpdate.Name = "statusLabelUpdate";
-            this.statusLabelUpdate.Size = new System.Drawing.Size(151, 26);
+            this.statusLabelUpdate.Size = new System.Drawing.Size(151, 25);
             this.statusLabelUpdate.Text = "Update Available!";
             this.statusLabelUpdate.Click += new System.EventHandler(this.statusLabelUpdate_Click);
             // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(244, 21);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(220, 20);
             this.toolStripStatusLabel1.Spring = true;
+            // 
+            // statusLabelDonate
+            // 
+            this.statusLabelDonate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.statusLabelDonate.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.statusLabelDonate.IsLink = true;
+            this.statusLabelDonate.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
+            this.statusLabelDonate.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.statusLabelDonate.Margin = new System.Windows.Forms.Padding(0, 0, 0, 2);
+            this.statusLabelDonate.Name = "statusLabelDonate";
+            this.statusLabelDonate.Size = new System.Drawing.Size(70, 25);
+            this.statusLabelDonate.Text = "Donate";
+            this.statusLabelDonate.ToolTipText = "Donate via PayPal";
+            this.statusLabelDonate.Click += new System.EventHandler(this.statusLabelDonate_Click);
             // 
             // btnSetPlaybackDefault
             // 
@@ -1065,33 +1142,6 @@
             // hotKeyBindingSource
             // 
             this.hotKeyBindingSource.DataSource = typeof(FortyOne.AudioSwitcher.HotKeyData.HotKey);
-            // 
-            // statusLabelDonate
-            // 
-            this.statusLabelDonate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.statusLabelDonate.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.statusLabelDonate.IsLink = true;
-            this.statusLabelDonate.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
-            this.statusLabelDonate.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-            this.statusLabelDonate.Margin = new System.Windows.Forms.Padding(0, 0, 0, 2);
-            this.statusLabelDonate.Name = "statusLabelDonate";
-            this.statusLabelDonate.Size = new System.Drawing.Size(70, 25);
-            this.statusLabelDonate.Text = "Donate";
-            this.statusLabelDonate.ToolTipText = "Donate via PayPal";
-            this.statusLabelDonate.Click += new System.EventHandler(this.statusLabelDonate_Click);
-            // 
-            // btnTestError
-            // 
-            this.btnTestError.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnTestError.Location = new System.Drawing.Point(295, 6);
-            this.btnTestError.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.btnTestError.Name = "btnTestError";
-            this.btnTestError.Size = new System.Drawing.Size(149, 43);
-            this.btnTestError.TabIndex = 6;
-            this.btnTestError.Text = "Test Error";
-            this.btnTestError.UseVisualStyleBackColor = true;
-            this.btnTestError.Visible = false;
-            this.btnTestError.Click += new System.EventHandler(this.button1_Click);
             // 
             // AudioSwitcher
             // 
@@ -1226,6 +1276,9 @@
         private System.Windows.Forms.CheckBox chkShowUnknownDevicesInHotkeyList;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.CheckBox chkDisableDblClick;
+        private System.Windows.Forms.CheckBox chkMiddleClickForVolumeMixer;
+        private System.Windows.Forms.CheckBox chkFixTrayIconContextMenuPosition;
+        private System.Windows.Forms.CheckBox chkMoveVolumeMixerToCursor;
         private System.Windows.Forms.ToolStripMenuItem mnuChangePlaybackIcon;
         private System.Windows.Forms.ToolStripMenuItem mnuResetPlaybackIcon;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
