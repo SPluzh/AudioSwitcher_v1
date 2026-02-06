@@ -32,6 +32,8 @@ namespace FortyOne.AudioSwitcher.Configuration
         public const string SETTING_FIX_TRAY_ICON_CONTEXT_MENU_POSITION = "FixTrayIconContextMenuPosition";
         public const string SETTING_MOVE_VOLUME_MIXER_TO_CURSOR = "MoveVolumeMixerToCursor";
         public const string SETTING_CUSTOMDEVICEICONS = "CustomDeviceIcons";
+        public const string SETTING_QUICKSWITCHHOTKEY = "QuickSwitchHotKey";
+        public const string SETTING_ENABLEQUICKSWITCHHOTKEY = "EnableQuickSwitchHotKey";
         private readonly ISettingsSource _configWriter;
 
         public ConfigurationSettings(ISettingsSource source)
@@ -225,6 +227,7 @@ namespace FortyOne.AudioSwitcher.Configuration
             set { _configWriter.Set(SETTING_DISABLEHOTKEYS, value.ToString()); }
         }
 
+
         public bool EnableQuickSwitch
         {
             get
@@ -233,6 +236,16 @@ namespace FortyOne.AudioSwitcher.Configuration
                     Convert.ToBoolean(_configWriter.Get(SETTING_ENABLEQUICKSWITCH));
             }
             set { _configWriter.Set(SETTING_ENABLEQUICKSWITCH, value.ToString()); }
+        }
+
+        public bool EnableQuickSwitchHotKey
+        {
+            get
+            {
+                return
+                    Convert.ToBoolean(_configWriter.Get(SETTING_ENABLEQUICKSWITCHHOTKEY));
+            }
+            set { _configWriter.Set(SETTING_ENABLEQUICKSWITCHHOTKEY, value.ToString()); }
         }
 
         public bool DisableDoubleClick
@@ -290,6 +303,18 @@ namespace FortyOne.AudioSwitcher.Configuration
             set { _configWriter.Set(SETTING_CUSTOMDEVICEICONS, value); }
         }
 
+        public string QuickSwitchHotKey
+        {
+            get
+            {
+                return SettingExists(SETTING_QUICKSWITCHHOTKEY) ? _configWriter.Get(SETTING_QUICKSWITCHHOTKEY) : string.Empty;
+            }
+            set
+            {
+                _configWriter.Set(SETTING_QUICKSWITCHHOTKEY, value);
+            }
+        }
+
         public void CreateDefaults()
         {
             if (!SettingExists(SETTING_CLOSETOTRAY))
@@ -306,6 +331,9 @@ namespace FortyOne.AudioSwitcher.Configuration
 
             if (!SettingExists(SETTING_ENABLEQUICKSWITCH))
                 EnableQuickSwitch = false;
+
+            if (!SettingExists(SETTING_ENABLEQUICKSWITCHHOTKEY))
+                EnableQuickSwitchHotKey = true;
 
             if (!SettingExists(SETTING_DISABLEDOUBLECLICK))
                 DisableDoubleClick = false;
@@ -365,6 +393,9 @@ namespace FortyOne.AudioSwitcher.Configuration
 
             if (!SettingExists(SETTING_CUSTOMDEVICEICONS))
                 CustomDeviceIcons = "{}";
+
+            if (!SettingExists(SETTING_QUICKSWITCHHOTKEY))
+                QuickSwitchHotKey = string.Empty;
         }
 
         public void LoadFrom(ConfigurationSettings otherSettings)
@@ -375,6 +406,7 @@ namespace FortyOne.AudioSwitcher.Configuration
             DisableHotKeys = otherSettings.DisableHotKeys;
             DualSwitchMode = otherSettings.DualSwitchMode;
             EnableQuickSwitch = otherSettings.EnableQuickSwitch;
+            EnableQuickSwitchHotKey = otherSettings.EnableQuickSwitchHotKey;
             DisableDoubleClick = otherSettings.DisableDoubleClick;
             FavouriteDevices = otherSettings.FavouriteDevices;
             HotKeys = otherSettings.HotKeys;
@@ -391,6 +423,7 @@ namespace FortyOne.AudioSwitcher.Configuration
             FixTrayIconContextMenuPosition = otherSettings.FixTrayIconContextMenuPosition;
             MoveVolumeMixerToCursor = otherSettings.MoveVolumeMixerToCursor;
             CustomDeviceIcons = otherSettings.CustomDeviceIcons;
+            QuickSwitchHotKey = otherSettings.QuickSwitchHotKey;
         }
 
         public bool SettingExists(string name)

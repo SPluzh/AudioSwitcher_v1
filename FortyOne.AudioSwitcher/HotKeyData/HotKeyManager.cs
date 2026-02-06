@@ -12,6 +12,7 @@ namespace FortyOne.AudioSwitcher.HotKeyData
     {
         private static readonly List<HotKey> _hotkeys = new List<HotKey>();
         public static BindingList<HotKey> HotKeys = new BindingList<HotKey>();
+        public static HotKey QuickSwitchHotKey { get; set; }
 
         static HotKeyManager()
         {
@@ -29,6 +30,14 @@ namespace FortyOne.AudioSwitcher.HotKeyData
             }
 
             Program.Settings.HotKeys = "";
+
+            if (QuickSwitchHotKey != null)
+            {
+                QuickSwitchHotKey.UnregisterHotkey();
+                QuickSwitchHotKey = null;
+                Program.Settings.QuickSwitchHotKey = "";
+            }
+
             LoadHotKeys();
             RefreshHotkeys();
         }
@@ -45,6 +54,8 @@ namespace FortyOne.AudioSwitcher.HotKeyData
                 _hotkeys.Clear();
 
                 var hotkeydata = Program.Settings.HotKeys;
+                LoadQuickSwitchHotKey();
+
                 if (string.IsNullOrEmpty(hotkeydata))
                 {
                     System.Diagnostics.Debug.WriteLine("No hotkey data found");
@@ -101,6 +112,79 @@ namespace FortyOne.AudioSwitcher.HotKeyData
                 HotKeyPressed(sender, e);
         }
 
+        public static void LoadQuickSwitchHotKey()
+        {
+            try
+            {
+                if (QuickSwitchHotKey != null)
+                {
+                    QuickSwitchHotKey.UnregisterHotkey();
+                    QuickSwitchHotKey = null;
+                }
+
+                var qsData = Program.Settings.QuickSwitchHotKey;
+                if (string.IsNullOrEmpty(qsData))
+                    return;
+
+                var entries = qsData.Split(new[] { ",", "[", "]" }, StringSplitOptions.RemoveEmptyEntries);
+
+                if (entries.Length >= 2)
+                {
+                    var key = int.Parse(entries[0]);
+                    var modifiers = int.Parse(entries[1]);
+
+                    var hk = new HotKey();
+                    hk.Modifiers = (Modifiers)modifiers;
+                    hk.Key = (Keys)key;
+                    hk.DeviceId = Guid.Empty; // Not tied to a specific device
+
+                    QuickSwitchHotKey = hk;
+                    hk.HotKeyPressed += hk_HotKeyPressed;
+                    hk.RegisterHotkey();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error loading Quick Switch hotkey: {ex.Message}");
+            }
+        }
+
+        public static void SaveQuickSwitchHotKey()
+        {
+            try
+            {
+                if (QuickSwitchHotKey == null || QuickSwitchHotKey.Key == Keys.None)
+                {
+                    Program.Settings.QuickSwitchHotKey = "";
+                    return;
+                }
+
+                var hotkeydata = "[" + (int)QuickSwitchHotKey.Key + "," + (int)QuickSwitchHotKey.Modifiers + "]";
+                Program.Settings.QuickSwitchHotKey = hotkeydata;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error saving Quick Switch hotkey: {ex.Message}");
+            }
+        }
+
+        public static bool SetQuickSwitchHotKey(HotKey hk)
+        {
+            if (DuplicateHotKey(hk))
+                return false;
+
+            if (QuickSwitchHotKey != null)
+            {
+                QuickSwitchHotKey.UnregisterHotkey();
+            }
+
+            QuickSwitchHotKey = hk;
+            QuickSwitchHotKey.HotKeyPressed += hk_HotKeyPressed;
+            QuickSwitchHotKey.RegisterHotkey();
+            
+            SaveQuickSwitchHotKey();
+            return true;
+        }
         public static void SaveHotKeys()
         {
             try 
@@ -176,6 +260,9 @@ namespace FortyOne.AudioSwitcher.HotKeyData
 
         public static bool DuplicateHotKey(HotKey hk)
         {
+            if (QuickSwitchHotKey != null && hk.Key == QuickSwitchHotKey.Key && hk.Modifiers == QuickSwitchHotKey.Modifiers)
+                return true;
+
             return _hotkeys.Any(k => hk.Key == k.Key && hk.Modifiers == k.Modifiers);
         }
 

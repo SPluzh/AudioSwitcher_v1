@@ -8,7 +8,8 @@ namespace FortyOne.AudioSwitcher
     public enum HotKeyFormMode
     {
         Normal,
-        Edit
+        Edit,
+        QuickSwitch
     }
 
     public partial class HotKeyForm : Form
@@ -20,9 +21,10 @@ namespace FortyOne.AudioSwitcher
 
         private bool _firstFocus = true;
 
-        public HotKeyForm()
+        public HotKeyForm(HotKeyFormMode mode = HotKeyFormMode.Normal)
         {
             InitializeComponent();
+            _mode = mode;
 
             _hotkey = new HotKey();
 
@@ -45,7 +47,7 @@ namespace FortyOne.AudioSwitcher
         }
 
         public HotKeyForm(HotKey hk)
-            : this()
+            : this(HotKeyFormMode.Edit)
         {
             _linkedHotKey = hk;
 
@@ -56,8 +58,6 @@ namespace FortyOne.AudioSwitcher
             txtHotKey.Text = hk.HotKeyString;
             _firstFocus = false;
 
-            _mode = HotKeyFormMode.Edit;
-
             Text = "Edit Hot Key";
             btnAdd.Text = "Save";
         }
@@ -66,12 +66,15 @@ namespace FortyOne.AudioSwitcher
         {
             AudioSwitcher.Instance.DisableHotKeyFunction = true;
 
-            foreach (var o in cmbDevices.Items)
+            if (_mode != HotKeyFormMode.QuickSwitch)
             {
-                if (((IDevice)o).Id == _hotkey.DeviceId)
+                foreach (var o in cmbDevices.Items)
                 {
-                    cmbDevices.SelectedIndex = cmbDevices.Items.IndexOf(o);
-                    break;
+                    if (((IDevice)o).Id == _hotkey.DeviceId)
+                    {
+                        cmbDevices.SelectedIndex = cmbDevices.Items.IndexOf(o);
+                        break;
+                    }
                 }
             }
 
@@ -95,6 +98,21 @@ namespace FortyOne.AudioSwitcher
 
             if (_mode == HotKeyFormMode.Edit)
                 HotKeyManager.DeleteHotKey(_linkedHotKey);
+
+            if (_mode == HotKeyFormMode.QuickSwitch)
+            {
+                if (HotKeyManager.SetQuickSwitchHotKey(_hotkey))
+                {
+                    DialogResult = DialogResult.OK;
+                    Close();
+                    return;
+                }
+                else
+                {
+                   errorProvider1.SetError(txtHotKey, "Hot Key is already registered");
+                   return;
+                }
+            }
 
             //Add HK
             if (HotKeyManager.AddHotKey(_hotkey))

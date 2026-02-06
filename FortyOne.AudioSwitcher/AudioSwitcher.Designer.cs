@@ -82,6 +82,10 @@
             this.chkFixTrayIconContextMenuPosition = new System.Windows.Forms.CheckBox();
             this.chkMoveVolumeMixerToCursor = new System.Windows.Forms.CheckBox();
             this.btnCheckUpdate = new System.Windows.Forms.Button();
+            this.flowPanelHotKey = new System.Windows.Forms.FlowLayoutPanel();
+            this.txtQuickSwitchHotKey = new System.Windows.Forms.TextBox();
+            this.btnClearQuickSwitchHotKey = new System.Windows.Forms.Button();
+            this.chkEnableQuickSwitchHotKey = new System.Windows.Forms.CheckBox();
             this.tapHotkeys = new System.Windows.Forms.TabPage();
             this.btnClearAll = new System.Windows.Forms.Button();
             this.btnDeleteHotKey = new System.Windows.Forms.Button();
@@ -452,6 +456,8 @@
             this.flowLayoutPanel1.Controls.Add(this.chkStartMinimized);
             this.flowLayoutPanel1.Controls.Add(this.chkDisableHotKeys);
             this.flowLayoutPanel1.Controls.Add(this.chkQuickSwitch);
+            this.flowLayoutPanel1.Controls.Add(this.flowPanelHotKey);
+            this.flowLayoutPanel1.Controls.Add(this.chkEnableQuickSwitchHotKey);
             this.flowLayoutPanel1.Controls.Add(this.chkDualSwitchMode);
             this.flowLayoutPanel1.Controls.Add(this.chkShowDiabledDevices);
             this.flowLayoutPanel1.Controls.Add(this.chkShowUnknownDevicesInHotkeyList);
@@ -532,6 +538,54 @@
             this.toolTip1.SetToolTip(this.chkQuickSwitch, "Left click on the Tray Icon will cycle through favourite playback devices");
             this.chkQuickSwitch.UseVisualStyleBackColor = true;
             this.chkQuickSwitch.CheckedChanged += new System.EventHandler(this.chkQuickSwitch_CheckedChanged);
+            // 
+            // 
+            // flowPanelHotKey
+            // 
+            this.flowPanelHotKey.AutoSize = true;
+            this.flowPanelHotKey.Controls.Add(this.txtQuickSwitchHotKey);
+            this.flowPanelHotKey.Controls.Add(this.btnClearQuickSwitchHotKey);
+            this.flowPanelHotKey.Location = new System.Drawing.Point(3, 148);
+            this.flowPanelHotKey.Name = "flowPanelHotKey";
+            this.flowPanelHotKey.Size = new System.Drawing.Size(236, 29);
+            this.flowPanelHotKey.TabIndex = 20;
+            // 
+            // txtQuickSwitchHotKey
+            // 
+            this.txtQuickSwitchHotKey.Location = new System.Drawing.Point(3, 3);
+            this.txtQuickSwitchHotKey.Name = "txtQuickSwitchHotKey";
+            this.txtQuickSwitchHotKey.Size = new System.Drawing.Size(150, 20);
+            this.txtQuickSwitchHotKey.TabIndex = 18;
+            this.txtQuickSwitchHotKey.ReadOnly = true;
+            this.txtQuickSwitchHotKey.BackColor = System.Drawing.SystemColors.Window;
+            this.toolTip1.SetToolTip(this.txtQuickSwitchHotKey, "Click and press keys to set Quick Switch Hotkey");
+            this.txtQuickSwitchHotKey.Enter += new System.EventHandler(this.txtQuickSwitchHotKey_Enter);
+            this.txtQuickSwitchHotKey.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtQuickSwitchHotKey_KeyUp);
+            // 
+            // btnClearQuickSwitchHotKey
+            // 
+            this.btnClearQuickSwitchHotKey.AutoSize = true;
+            this.btnClearQuickSwitchHotKey.Location = new System.Drawing.Point(159, 3);
+            this.btnClearQuickSwitchHotKey.Name = "btnClearQuickSwitchHotKey";
+            this.btnClearQuickSwitchHotKey.Size = new System.Drawing.Size(75, 23);
+            this.btnClearQuickSwitchHotKey.TabIndex = 19;
+            this.btnClearQuickSwitchHotKey.Text = "Clear Hotkey";
+            this.btnClearQuickSwitchHotKey.AutoSize = true;
+            this.btnClearQuickSwitchHotKey.UseVisualStyleBackColor = true;
+            this.btnClearQuickSwitchHotKey.Click += new System.EventHandler(this.btnClearQuickSwitchHotKey_Click);
+            // 
+            // chkEnableQuickSwitchHotKey
+            // 
+            this.chkEnableQuickSwitchHotKey.AutoSize = true;
+            this.chkEnableQuickSwitchHotKey.Location = new System.Drawing.Point(2, 184); // Auto-layout in FlowLayoutPanel, location is relative but order matters
+            this.chkEnableQuickSwitchHotKey.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.chkEnableQuickSwitchHotKey.Name = "chkEnableQuickSwitchHotKey";
+            this.chkEnableQuickSwitchHotKey.Size = new System.Drawing.Size(229, 24);
+            this.chkEnableQuickSwitchHotKey.TabIndex = 19;
+            this.chkEnableQuickSwitchHotKey.Text = "Enable Quick Switch HotKey";
+            this.toolTip1.SetToolTip(this.chkEnableQuickSwitchHotKey, "Enables the global hotkey for Quick Switch");
+            this.chkEnableQuickSwitchHotKey.UseVisualStyleBackColor = true;
+            this.chkEnableQuickSwitchHotKey.CheckedChanged += new System.EventHandler(this.chkEnableQuickSwitchHotKey_CheckedChanged);
             // 
             // chkDualSwitchMode
             // 
@@ -644,7 +698,7 @@
             this.chkFixTrayIconContextMenuPosition.Location = new System.Drawing.Point(2, 393);
             this.chkFixTrayIconContextMenuPosition.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.chkFixTrayIconContextMenuPosition.Name = "chkFixTrayIconContextMenuPosition";
-            this.chkFixTrayIconContextMenuPosition.Size = new System.Drawing.Size(268, 24);
+            this.chkFixTrayIconContextMenuPosition.Size = new System.Drawing.Size(225, 24);
             this.chkFixTrayIconContextMenuPosition.TabIndex = 10;
             this.chkFixTrayIconContextMenuPosition.Text = "Fix context menu position";
             this.toolTip1.SetToolTip(this.chkFixTrayIconContextMenuPosition, "Fixes the position of the context menu on multi-monitor setups");
@@ -657,7 +711,7 @@
             this.chkMoveVolumeMixerToCursor.Location = new System.Drawing.Point(2, 423);
             this.chkMoveVolumeMixerToCursor.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.chkMoveVolumeMixerToCursor.Name = "chkMoveVolumeMixerToCursor";
-            this.chkMoveVolumeMixerToCursor.Size = new System.Drawing.Size(268, 24);
+            this.chkMoveVolumeMixerToCursor.Size = new System.Drawing.Size(254, 24);
             this.chkMoveVolumeMixerToCursor.TabIndex = 11;
             this.chkMoveVolumeMixerToCursor.Text = "Move Volume Mixer to cursor";
             this.toolTip1.SetToolTip(this.chkMoveVolumeMixerToCursor, "Moves the Volume Mixer window to the cursor position when opened");
@@ -1287,6 +1341,10 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.Button btnTestError;
         private System.Windows.Forms.ToolStripStatusLabel statusLabelDonate;
+        private System.Windows.Forms.FlowLayoutPanel flowPanelHotKey;
+        private System.Windows.Forms.TextBox txtQuickSwitchHotKey;
+        private System.Windows.Forms.Button btnClearQuickSwitchHotKey;
+        private System.Windows.Forms.CheckBox chkEnableQuickSwitchHotKey;
     }
 }
 

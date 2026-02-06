@@ -58,6 +58,7 @@ namespace FortyOne.AudioSwitcher
         };
 
         private DeviceState _deviceStateFilter = DeviceState.Active;
+        private bool _firstFocus = true;
         private bool _doubleClickHappened;
         private bool _firstStart = true;
         private int _konamiIndex = 0;
@@ -93,10 +94,19 @@ namespace FortyOne.AudioSwitcher
             AudioDeviceManager.Controller.AudioDeviceChanged.Subscribe(AudioDeviceManager_AudioDeviceChanged);
 
             HotKeyManager.HotKeyPressed += HotKeyManager_HotKeyPressed;
+            if (HotKeyManager.QuickSwitchHotKey != null)
+                HotKeyManager.QuickSwitchHotKey.HotKeyPressed += HotKeyManager_HotKeyPressed;
+
             hotKeyBindingSource.DataSource = HotKeyManager.HotKeys;
 
             //Heartbeat
             Task.Factory.StartNew(CheckForNewVersion);
+
+            if (Program.Settings.QuickSwitchHotKey != null && Program.Settings.QuickSwitchHotKey != "")
+            {
+                HotKeyManager.LoadQuickSwitchHotKey();
+                txtQuickSwitchHotKey.Text = HotKeyManager.QuickSwitchHotKey.HotKeyString;
+            }
 
             MinimizeFootprint();
         }
@@ -442,6 +452,11 @@ namespace FortyOne.AudioSwitcher
             }
         }
 
+        private void chkEnableQuickSwitchHotKey_CheckedChanged(object sender, EventArgs e)
+        {
+            Program.Settings.EnableQuickSwitchHotKey = chkEnableQuickSwitchHotKey.Checked;
+        }
+
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
         {
             _doubleClickHappened = false;
@@ -595,52 +610,7 @@ namespace FortyOne.AudioSwitcher
 
             if (Program.Settings.EnableQuickSwitch)
             {
-                if (FavouriteDeviceManager.FavouriteDeviceCount > 0)
-                {
-                    var changed = false;
-                    var currentDefaultDevice = AudioDeviceManager.Controller.DefaultPlaybackDevice;
-                    var candidate = FavouriteDeviceManager.GetNextFavouritePlaybackDevice(currentDefaultDevice);
-                    var attemptsCount = FavouriteDeviceManager.FavouritePlaybackDeviceCount;
-                    for (var i = 0; !changed && i < attemptsCount; i++)
-                    {
-                        changed = await candidate.SetAsDefaultAsync();
-
-                        if (changed && Program.Settings.DualSwitchMode)
-                            await candidate.SetAsDefaultCommunicationsAsync();
-
-                        if (!changed)
-                            candidate = FavouriteDeviceManager.GetNextFavouritePlaybackDevice(candidate);
-                    }
-                }
-                else
-                {
-                    var currentDefault = AudioDeviceManager.Controller.DefaultPlaybackDevice;
-                    var playbackDevices = (await AudioDeviceManager.Controller.GetPlaybackDevicesAsync(DeviceState.Active))
-                                            .OrderBy(x => x.Name)
-                                            .ToList();
-
-                    var deviceIndex = playbackDevices.IndexOf(currentDefault);
-                    var newIndex = deviceIndex;
-
-                    while (true)
-                    {
-                        newIndex = (newIndex + 1) % playbackDevices.Count;
-
-                        if (newIndex == deviceIndex)
-                            break;
-
-                        try
-                        {
-                            var newDevice = playbackDevices[newIndex];
-                            if (await newDevice.SetAsDefaultAsync())
-                                break;
-                        }
-                        catch
-                        {
-                            // ignored
-                        }
-                    }
-                }
+                RunQuickSwitch();
             }
             else
             {
@@ -987,6 +957,7 @@ namespace FortyOne.AudioSwitcher
             chkAutoStartWithWindows.Checked = Program.Settings.AutoStartWithWindows;
             chkDisableHotKeys.Checked = Program.Settings.DisableHotKeys;
             chkQuickSwitch.Checked = Program.Settings.EnableQuickSwitch;
+            chkEnableQuickSwitchHotKey.Checked = Program.Settings.EnableQuickSwitchHotKey;
             chkDisableDblClick.Checked = Program.Settings.DisableDoubleClick;
             chkDualSwitchMode.Checked = Program.Settings.DualSwitchMode;
             chkNotifyUpdates.Checked = Program.Settings.UpdateNotificationsEnabled;
@@ -1536,6 +1507,16 @@ namespace FortyOne.AudioSwitcher
             {
                 var hk = sender as HotKey;
 
+                // Handle Quick Switch Hotkey
+                if (HotKeyManager.QuickSwitchHotKey != null &&
+                    hk.Key == HotKeyManager.QuickSwitchHotKey.Key &&
+                    hk.Modifiers == HotKeyManager.QuickSwitchHotKey.Modifiers)
+                {
+                    if (Program.Settings.EnableQuickSwitchHotKey)
+                        RunQuickSwitch();
+                    return;
+                }
+
                 if (hk.Device == null || hk.Device.IsDefaultDevice)
                     return;
 
@@ -1544,6 +1525,74 @@ namespace FortyOne.AudioSwitcher
                 if (Program.Settings.DualSwitchMode)
                     await hk.Device.SetAsDefaultCommunicationsAsync();
             }
+        }
+
+        private async void RunQuickSwitch()
+        {
+            if (FavouriteDeviceManager.FavouriteDeviceCount > 0)
+            {
+                var changed = false;
+                var currentDefaultDevice = AudioDeviceManager.Controller.DefaultPlaybackDevice;
+                var candidate = FavouriteDeviceManager.GetNextFavouritePlaybackDevice(currentDefaultDevice);
+                var attemptsCount = FavouriteDeviceManager.FavouritePlaybackDeviceCount;
+                for (var i = 0; !changed && i < attemptsCount; i++)
+                {
+                    changed = await candidate.SetAsDefaultAsync();
+
+                    if (changed && Program.Settings.DualSwitchMode)
+                        await candidate.SetAsDefaultCommunicationsAsync();
+
+                    if (!changed)
+                        candidate = FavouriteDeviceManager.GetNextFavouritePlaybackDevice(candidate);
+                }
+            }
+            else
+            {
+                var currentDefault = AudioDeviceManager.Controller.DefaultPlaybackDevice;
+                var playbackDevices = (await AudioDeviceManager.Controller.GetPlaybackDevicesAsync(DeviceState.Active))
+                                        .OrderBy(x => x.Name)
+                                        .ToList();
+
+                var deviceIndex = playbackDevices.IndexOf(currentDefault);
+                var newIndex = deviceIndex;
+
+                while (true)
+                {
+                    newIndex = (newIndex + 1) % playbackDevices.Count;
+
+                    if (newIndex == deviceIndex)
+                        break;
+
+                    try
+                    {
+                        var newDevice = playbackDevices[newIndex];
+                        if (await newDevice.SetAsDefaultAsync())
+                            break;
+                    }
+                    catch
+                    {
+                        // ignored
+                    }
+                }
+            }
+        }
+
+        private void btnSetQuickSwitchHotKey_Click(object sender, EventArgs e)
+        {
+            var hk = HotKeyManager.QuickSwitchHotKey;
+            if (hk == null)
+            {
+                hk = new HotKey();
+                hk.DeviceId = Guid.Empty;
+            }
+
+            var hkf = new HotKeyForm(HotKeyFormMode.QuickSwitch);
+            if (HotKeyManager.QuickSwitchHotKey != null)
+                 hkf = new HotKeyForm(HotKeyManager.QuickSwitchHotKey);
+            else
+                 hkf = new HotKeyForm(HotKeyFormMode.QuickSwitch);
+
+            hkf.ShowDialog(this);
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -1898,5 +1947,73 @@ namespace FortyOne.AudioSwitcher
             ResetCustomIconPath(SelectedRecordingDevice.Id);
             RefreshRecordingDevices();
         }
+        private void txtQuickSwitchHotKey_Enter(object sender, EventArgs e)
+        {
+            if (_firstFocus)
+            {
+                txtQuickSwitchHotKey.Text = "";
+                _firstFocus = false;
+            }
+        }
+
+        private void txtQuickSwitchHotKey_KeyUp(object sender, KeyEventArgs e)
+        {
+             // Ignore modifier keys alone
+            if (e.KeyCode == Keys.ShiftKey ||
+                e.KeyCode == Keys.ControlKey ||
+                e.KeyCode == Keys.Menu || // Alt
+                e.KeyCode == Keys.LWin ||
+                e.KeyCode == Keys.RWin)
+                return;
+
+            var hk = new HotKey();
+            hk.Key = e.KeyCode;
+            hk.Modifiers = Modifiers.None;
+
+            if (e.Control) hk.Modifiers |= Modifiers.Control;
+            if (e.Alt) hk.Modifiers |= Modifiers.Alt;
+            if (e.Shift) hk.Modifiers |= Modifiers.Shift;
+            
+            // Check for Win key
+            bool isLeftWinPressed = (GetKeyState(0x5B) & 0x8000) != 0; // VK_LWIN
+            bool isRightWinPressed = (GetKeyState(0x5C) & 0x8000) != 0; // VK_RWIN
+            if (isLeftWinPressed || isRightWinPressed)
+                hk.Modifiers |= Modifiers.Win;
+
+            // Update Text
+            txtQuickSwitchHotKey.Text = hk.HotKeyString;
+
+            // Attempt to set as Quick Switch Hotkey
+            // Note: HotKeyManager.SetQuickSwitchHotKey handles unregistering the old one
+            if (HotKeyManager.SetQuickSwitchHotKey(hk))
+            {
+                // Success
+                _firstFocus = true; // Reset focus flag so next click clears it if desired, or keep logic as is
+            }
+            else
+            {
+                // Failed - likely duplicate
+                 //MessageBox.Show(this, "Hot Key is already registered or invalid.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                 // Revert text to previous valid hotkey if available
+                 if (HotKeyManager.QuickSwitchHotKey != null)
+                     txtQuickSwitchHotKey.Text = HotKeyManager.QuickSwitchHotKey.HotKeyString;
+                 else
+                     txtQuickSwitchHotKey.Text = "";
+            }
+        }
+
+        private void btnClearQuickSwitchHotKey_Click(object sender, EventArgs e)
+        {
+            if (HotKeyManager.QuickSwitchHotKey != null)
+            {
+                HotKeyManager.QuickSwitchHotKey.UnregisterHotkey();
+                HotKeyManager.QuickSwitchHotKey = null;
+                Program.Settings.QuickSwitchHotKey = "";
+                txtQuickSwitchHotKey.Text = "";
+            }
+        }
+
+        [DllImport("user32.dll")]
+        public static extern short GetKeyState(int nVirtKey);
 	}
 }
