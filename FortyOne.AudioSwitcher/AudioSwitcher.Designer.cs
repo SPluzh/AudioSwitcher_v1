@@ -92,6 +92,7 @@
             this.chkFixTrayIconContextMenuPosition = new System.Windows.Forms.CheckBox();
             this.chkMoveVolumeMixerToCursor = new System.Windows.Forms.CheckBox();
             this.chkEnableVolumeStepHook = new System.Windows.Forms.CheckBox();
+            this.chkShowVolumeOSD = new System.Windows.Forms.CheckBox();
             this.btnCheckUpdate = new System.Windows.Forms.Button();
             this.tapHotkeys = new System.Windows.Forms.TabPage();
             this.btnClearAll = new System.Windows.Forms.Button();
@@ -505,6 +506,7 @@
             this.flowLayoutPanel1.Controls.Add(this.chkMiddleClickForVolumeMixer);
             this.flowLayoutPanel1.Controls.Add(this.chkMoveVolumeMixerToCursor);
             this.flowLayoutPanel1.Controls.Add(this.chkEnableVolumeStepHook);
+            this.flowLayoutPanel1.Controls.Add(this.chkShowVolumeOSD);
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 6);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -765,6 +767,19 @@
             this.toolTip1.SetToolTip(this.chkEnableVolumeStepHook, "Intercept Volume Up/Down keys to change volume in 1% steps");
             this.chkEnableVolumeStepHook.UseVisualStyleBackColor = true;
             this.chkEnableVolumeStepHook.CheckedChanged += new System.EventHandler(this.chkEnableVolumeStepHook_CheckedChanged);
+            // 
+            // chkShowVolumeOSD
+            // 
+            this.chkShowVolumeOSD.AutoSize = true;
+            this.chkShowVolumeOSD.Location = new System.Drawing.Point(2, 555);
+            this.chkShowVolumeOSD.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.chkShowVolumeOSD.Name = "chkShowVolumeOSD";
+            this.chkShowVolumeOSD.Size = new System.Drawing.Size(240, 24);
+            this.chkShowVolumeOSD.TabIndex = 13;
+            this.chkShowVolumeOSD.Text = "Show custom volume OSD";
+            this.toolTip1.SetToolTip(this.chkShowVolumeOSD, "Shows the custom On-Screen Display when changing volume.");
+            this.chkShowVolumeOSD.UseVisualStyleBackColor = true;
+            this.chkShowVolumeOSD.CheckedChanged += new System.EventHandler(this.chkShowVolumeOSD_CheckedChanged);
             // 
             // btnCheckUpdate
             // 
@@ -1366,6 +1381,7 @@
         private System.Windows.Forms.TextBox txtQuickSwitchHotKey;
         private System.Windows.Forms.Button btnClearQuickSwitchHotKey;
         private System.Windows.Forms.CheckBox chkEnableQuickSwitchHotKey;
+        private System.Windows.Forms.CheckBox chkShowVolumeOSD;
     }
 }
 

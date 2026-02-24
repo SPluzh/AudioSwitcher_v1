@@ -473,6 +473,8 @@ namespace FortyOne.AudioSwitcher
                 if (_volumeHook != null)
                     _volumeHook.Unhook();
             }
+
+            chkShowVolumeOSD.Enabled = chkEnableVolumeStepHook.Checked;
         }
 
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
@@ -988,6 +990,8 @@ namespace FortyOne.AudioSwitcher
             chkFixTrayIconContextMenuPosition.Checked = Program.Settings.FixTrayIconContextMenuPosition;
             chkMoveVolumeMixerToCursor.Checked = Program.Settings.MoveVolumeMixerToCursor;
             chkEnableVolumeStepHook.Checked = Program.Settings.EnableVolumeStepHook;
+            chkShowVolumeOSD.Checked = Program.Settings.ShowVolumeOSD;
+            chkShowVolumeOSD.Enabled = chkEnableVolumeStepHook.Checked;
             
             ApplyContextMenuBehavior();
 
@@ -1874,6 +1878,11 @@ namespace FortyOne.AudioSwitcher
             var id = SelectedRecordingDevice.Id;
             await SelectedRecordingDevice.SetAsDefaultAsync();
             PostRecordingMenuClick(id);
+        }
+
+        private void chkShowVolumeOSD_CheckedChanged(object sender, EventArgs e)
+        {
+            Program.Settings.ShowVolumeOSD = chkShowVolumeOSD.Checked;
         }
 
 		private void chkShowUnknownDevicesInHotkeyList_CheckedChanged(object sender, EventArgs e)

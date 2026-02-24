@@ -51,7 +51,8 @@ namespace FortyOne.AudioSwitcher.Helpers
                     {
                         var newVol = Math.Min(VolumeHelper.Get() + STEP, 100);
                         await VolumeHelper.Set(newVol);
-                        AudioSwitcher.Instance.BeginInvoke((Action)(() => VolumeOSD.ShowVolume((int)newVol, VolumeHelper.IsMuted())));
+                        if (Program.Settings.ShowVolumeOSD)
+                            AudioSwitcher.Instance.BeginInvoke((Action)(() => VolumeOSD.ShowVolume((int)newVol, VolumeHelper.IsMuted())));
                     });
                     return (IntPtr)1;
                 }
@@ -61,7 +62,8 @@ namespace FortyOne.AudioSwitcher.Helpers
                     {
                         var newVol = Math.Max(VolumeHelper.Get() - STEP, 0);
                         await VolumeHelper.Set(newVol);
-                        AudioSwitcher.Instance.BeginInvoke((Action)(() => VolumeOSD.ShowVolume((int)newVol, VolumeHelper.IsMuted())));
+                        if (Program.Settings.ShowVolumeOSD)
+                            AudioSwitcher.Instance.BeginInvoke((Action)(() => VolumeOSD.ShowVolume((int)newVol, VolumeHelper.IsMuted())));
                     });
                     return (IntPtr)1;
                 }
@@ -71,7 +73,8 @@ namespace FortyOne.AudioSwitcher.Helpers
                     {
                         await VolumeHelper.ToggleMute();
                         var currentVol = VolumeHelper.Get();
-                        AudioSwitcher.Instance.BeginInvoke((Action)(() => VolumeOSD.ShowVolume((int)currentVol, VolumeHelper.IsMuted())));
+                        if (Program.Settings.ShowVolumeOSD)
+                            AudioSwitcher.Instance.BeginInvoke((Action)(() => VolumeOSD.ShowVolume((int)currentVol, VolumeHelper.IsMuted())));
                     });
                     return (IntPtr)1;
                 }

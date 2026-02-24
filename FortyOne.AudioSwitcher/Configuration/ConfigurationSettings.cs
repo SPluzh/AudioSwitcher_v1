@@ -35,6 +35,7 @@ namespace FortyOne.AudioSwitcher.Configuration
         public const string SETTING_QUICKSWITCHHOTKEY = "QuickSwitchHotKey";
         public const string SETTING_ENABLEQUICKSWITCHHOTKEY = "EnableQuickSwitchHotKey";
         public const string SETTING_ENABLEVOLUMESTEPHOOK = "EnableVolumeStepHook";
+        public const string SETTING_SHOWVOLUMEOSD = "ShowVolumeOSD";
         private readonly ISettingsSource _configWriter;
 
         public ConfigurationSettings(ISettingsSource source)
@@ -259,6 +260,18 @@ namespace FortyOne.AudioSwitcher.Configuration
             set { _configWriter.Set(SETTING_ENABLEVOLUMESTEPHOOK, value.ToString()); }
         }
 
+        public bool ShowVolumeOSD
+        {
+            get
+            {
+                if (SettingExists(SETTING_SHOWVOLUMEOSD))
+                    return Convert.ToBoolean(_configWriter.Get(SETTING_SHOWVOLUMEOSD));
+
+                return true;
+            }
+            set { _configWriter.Set(SETTING_SHOWVOLUMEOSD, value.ToString()); }
+        }
+
         public bool DisableDoubleClick
         {
             get
@@ -410,6 +423,9 @@ namespace FortyOne.AudioSwitcher.Configuration
 
             if (!SettingExists(SETTING_ENABLEVOLUMESTEPHOOK))
                 EnableVolumeStepHook = false;
+
+            if (!SettingExists(SETTING_SHOWVOLUMEOSD))
+                ShowVolumeOSD = true;
         }
 
         public void LoadFrom(ConfigurationSettings otherSettings)
@@ -439,6 +455,7 @@ namespace FortyOne.AudioSwitcher.Configuration
             CustomDeviceIcons = otherSettings.CustomDeviceIcons;
             QuickSwitchHotKey = otherSettings.QuickSwitchHotKey;
             EnableVolumeStepHook = otherSettings.EnableVolumeStepHook;
+            ShowVolumeOSD = otherSettings.ShowVolumeOSD;
         }
 
         public bool SettingExists(string name)
