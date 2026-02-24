@@ -47,12 +47,32 @@ namespace FortyOne.AudioSwitcher.Helpers
 
                 if (vk == 0xAF) // Volume Up
                 {
-                    System.Threading.Tasks.Task.Run(() => VolumeHelper.Set(Math.Min(VolumeHelper.Get() + STEP, 100)));
+                    System.Threading.Tasks.Task.Run(async () =>
+                    {
+                        var newVol = Math.Min(VolumeHelper.Get() + STEP, 100);
+                        await VolumeHelper.Set(newVol);
+                        AudioSwitcher.Instance.BeginInvoke((Action)(() => VolumeOSD.ShowVolume((int)newVol, VolumeHelper.IsMuted())));
+                    });
                     return (IntPtr)1;
                 }
                 if (vk == 0xAE) // Volume Down
                 {
-                    System.Threading.Tasks.Task.Run(() => VolumeHelper.Set(Math.Max(VolumeHelper.Get() - STEP, 0)));
+                    System.Threading.Tasks.Task.Run(async () =>
+                    {
+                        var newVol = Math.Max(VolumeHelper.Get() - STEP, 0);
+                        await VolumeHelper.Set(newVol);
+                        AudioSwitcher.Instance.BeginInvoke((Action)(() => VolumeOSD.ShowVolume((int)newVol, VolumeHelper.IsMuted())));
+                    });
+                    return (IntPtr)1;
+                }
+                if (vk == 0xAD) // Volume Mute
+                {
+                    System.Threading.Tasks.Task.Run(async () =>
+                    {
+                        await VolumeHelper.ToggleMute();
+                        var currentVol = VolumeHelper.Get();
+                        AudioSwitcher.Instance.BeginInvoke((Action)(() => VolumeOSD.ShowVolume((int)currentVol, VolumeHelper.IsMuted())));
+                    });
                     return (IntPtr)1;
                 }
             }

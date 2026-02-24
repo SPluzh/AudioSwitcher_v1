@@ -146,6 +146,9 @@
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\VolumeHelper.cs" />
     <Compile Include="Helpers\VolumeHook.cs" />
+    <Compile Include="Helpers\VolumeOSD.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="HotKeyData\Enums.cs" />
     <Compile Include="HotKeyData\HotKey.cs" />
     <Compile Include="HotKeyData\HotKeyManager.cs" />
@@ -220,7 +223,7 @@
     <None Include="Icons\twitter.png" />
     <Content Include="Resources\112_Plus_Green_16x16_72.png" />
     <Content Include="Resources\112_RefreshArrow_Green_16x16_72.png" />
-<!-- Removed signing file -->
+    <!-- Removed signing file -->
     <None Include="Resources\AutoUpdater.exe" />
     <Content Include="Resources\btn_donateCC_LG.png" />
     <Content Include="Resources\delete.png" />
@@ -228,7 +231,7 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
-<!-- Removed signing file -->
+    <!-- Removed signing file -->
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

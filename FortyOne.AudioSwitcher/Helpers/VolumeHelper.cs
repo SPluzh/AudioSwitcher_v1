@@ -21,7 +21,7 @@ namespace FortyOne.AudioSwitcher.Helpers
             if (device != null)
             {
                 await device.SetVolumeAsync(volume);
-                if (volume < 1)
+                if (volume <= 0)
                 {
                     await device.SetMuteAsync(true);
                 }
@@ -29,6 +29,20 @@ namespace FortyOne.AudioSwitcher.Helpers
                 {
                     await device.SetMuteAsync(false);
                 }
+            }
+        }
+        public static bool IsMuted()
+        {
+            var device = AudioDeviceManager.Controller.DefaultPlaybackDevice;
+            return device != null && device.IsMuted;
+        }
+
+        public static async System.Threading.Tasks.Task ToggleMute()
+        {
+            var device = AudioDeviceManager.Controller.DefaultPlaybackDevice;
+            if (device != null)
+            {
+                await device.SetMuteAsync(!device.IsMuted);
             }
         }
     }
