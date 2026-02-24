@@ -475,6 +475,13 @@ namespace FortyOne.AudioSwitcher
             }
 
             chkShowVolumeOSD.Enabled = chkEnableVolumeStepHook.Checked;
+            numVolumeStep.Enabled = chkEnableVolumeStepHook.Checked;
+            lblVolumeStepPercent.Enabled = chkEnableVolumeStepHook.Checked;
+        }
+
+        private void numVolumeStep_ValueChanged(object sender, EventArgs e)
+        {
+            Program.Settings.VolumeStep = (int)numVolumeStep.Value;
         }
 
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
@@ -990,6 +997,9 @@ namespace FortyOne.AudioSwitcher
             chkFixTrayIconContextMenuPosition.Checked = Program.Settings.FixTrayIconContextMenuPosition;
             chkMoveVolumeMixerToCursor.Checked = Program.Settings.MoveVolumeMixerToCursor;
             chkEnableVolumeStepHook.Checked = Program.Settings.EnableVolumeStepHook;
+            numVolumeStep.Value = Program.Settings.VolumeStep;
+            numVolumeStep.Enabled = chkEnableVolumeStepHook.Checked;
+            lblVolumeStepPercent.Enabled = chkEnableVolumeStepHook.Checked;
             chkShowVolumeOSD.Checked = Program.Settings.ShowVolumeOSD;
             chkShowVolumeOSD.Enabled = chkEnableVolumeStepHook.Checked;
             

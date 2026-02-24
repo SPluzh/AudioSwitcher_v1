@@ -7,7 +7,7 @@ namespace FortyOne.AudioSwitcher.Helpers
 {
     public class VolumeHook : IDisposable
     {
-        private const int STEP = 1;
+        private int Step => Program.Settings.VolumeStep;
         private IntPtr _hookId = IntPtr.Zero;
         private readonly LowLevelKeyboardProc _proc;
 
@@ -49,7 +49,7 @@ namespace FortyOne.AudioSwitcher.Helpers
                 {
                     System.Threading.Tasks.Task.Run(async () =>
                     {
-                        var newVol = Math.Min(VolumeHelper.Get() + STEP, 100);
+                        var newVol = Math.Min(VolumeHelper.Get() + Step, 100);
                         await VolumeHelper.Set(newVol);
                         if (Program.Settings.ShowVolumeOSD)
                             AudioSwitcher.Instance.BeginInvoke((Action)(() => VolumeOSD.ShowVolume((int)newVol, VolumeHelper.IsMuted())));
@@ -60,7 +60,7 @@ namespace FortyOne.AudioSwitcher.Helpers
                 {
                     System.Threading.Tasks.Task.Run(async () =>
                     {
-                        var newVol = Math.Max(VolumeHelper.Get() - STEP, 0);
+                        var newVol = Math.Max(VolumeHelper.Get() - Step, 0);
                         await VolumeHelper.Set(newVol);
                         if (Program.Settings.ShowVolumeOSD)
                             AudioSwitcher.Instance.BeginInvoke((Action)(() => VolumeOSD.ShowVolume((int)newVol, VolumeHelper.IsMuted())));

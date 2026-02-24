@@ -92,6 +92,9 @@
             this.chkFixTrayIconContextMenuPosition = new System.Windows.Forms.CheckBox();
             this.chkMoveVolumeMixerToCursor = new System.Windows.Forms.CheckBox();
             this.chkEnableVolumeStepHook = new System.Windows.Forms.CheckBox();
+            this.flowPanelVolumeStep = new System.Windows.Forms.FlowLayoutPanel();
+            this.numVolumeStep = new System.Windows.Forms.NumericUpDown();
+            this.lblVolumeStepPercent = new System.Windows.Forms.Label();
             this.chkShowVolumeOSD = new System.Windows.Forms.CheckBox();
             this.btnCheckUpdate = new System.Windows.Forms.Button();
             this.tapHotkeys = new System.Windows.Forms.TabPage();
@@ -141,7 +144,9 @@
             this.recordingStrip.SuspendLayout();
             this.tapSettings.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
+            this.flowPanelVolumeStep.SuspendLayout();
             this.flowPanelHotKey.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numVolumeStep)).BeginInit();
             this.tapHotkeys.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.hotKeyBindingSource)).BeginInit();
@@ -506,6 +511,7 @@
             this.flowLayoutPanel1.Controls.Add(this.chkMiddleClickForVolumeMixer);
             this.flowLayoutPanel1.Controls.Add(this.chkMoveVolumeMixerToCursor);
             this.flowLayoutPanel1.Controls.Add(this.chkEnableVolumeStepHook);
+            this.flowLayoutPanel1.Controls.Add(this.flowPanelVolumeStep);
             this.flowLayoutPanel1.Controls.Add(this.chkShowVolumeOSD);
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 6);
@@ -763,15 +769,48 @@
             this.chkEnableVolumeStepHook.Name = "chkEnableVolumeStepHook";
             this.chkEnableVolumeStepHook.Size = new System.Drawing.Size(240, 24);
             this.chkEnableVolumeStepHook.TabIndex = 12;
-            this.chkEnableVolumeStepHook.Text = "Change volume by 1%";
-            this.toolTip1.SetToolTip(this.chkEnableVolumeStepHook, "Intercept Volume Up/Down keys to change volume in 1% steps");
+            this.chkEnableVolumeStepHook.Text = "Enable custom volume step";
+            this.toolTip1.SetToolTip(this.chkEnableVolumeStepHook, "Intercept Volume Up/Down keys to change volume by the specified step");
             this.chkEnableVolumeStepHook.UseVisualStyleBackColor = true;
             this.chkEnableVolumeStepHook.CheckedChanged += new System.EventHandler(this.chkEnableVolumeStepHook_CheckedChanged);
+            // 
+            // flowPanelVolumeStep
+            // 
+            this.flowPanelVolumeStep.AutoSize = true;
+            this.flowPanelVolumeStep.Controls.Add(this.numVolumeStep);
+            this.flowPanelVolumeStep.Controls.Add(this.lblVolumeStepPercent);
+            this.flowPanelVolumeStep.Location = new System.Drawing.Point(0, 552);
+            this.flowPanelVolumeStep.Margin = new System.Windows.Forms.Padding(0);
+            this.flowPanelVolumeStep.Name = "flowPanelVolumeStep";
+            this.flowPanelVolumeStep.Size = new System.Drawing.Size(94, 32);
+            this.flowPanelVolumeStep.TabIndex = 22;
+            // 
+            // numVolumeStep
+            // 
+            this.numVolumeStep.Location = new System.Drawing.Point(20, 3);
+            this.numVolumeStep.Margin = new System.Windows.Forms.Padding(20, 3, 2, 3);
+            this.numVolumeStep.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            this.numVolumeStep.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
+            this.numVolumeStep.Name = "numVolumeStep";
+            this.numVolumeStep.Size = new System.Drawing.Size(50, 26);
+            this.numVolumeStep.TabIndex = 21;
+            this.numVolumeStep.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            this.numVolumeStep.ValueChanged += new System.EventHandler(this.numVolumeStep_ValueChanged);
+            // 
+            // lblVolumeStepPercent
+            // 
+            this.lblVolumeStepPercent.AutoSize = true;
+            this.lblVolumeStepPercent.Location = new System.Drawing.Point(72, 6);
+            this.lblVolumeStepPercent.Margin = new System.Windows.Forms.Padding(0, 6, 2, 3);
+            this.lblVolumeStepPercent.Name = "lblVolumeStepPercent";
+            this.lblVolumeStepPercent.Size = new System.Drawing.Size(20, 20);
+            this.lblVolumeStepPercent.TabIndex = 22;
+            this.lblVolumeStepPercent.Text = "%";
             // 
             // chkShowVolumeOSD
             // 
             this.chkShowVolumeOSD.AutoSize = true;
-            this.chkShowVolumeOSD.Location = new System.Drawing.Point(2, 555);
+            this.chkShowVolumeOSD.Location = new System.Drawing.Point(2, 587);
             this.chkShowVolumeOSD.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.chkShowVolumeOSD.Name = "chkShowVolumeOSD";
             this.chkShowVolumeOSD.Size = new System.Drawing.Size(240, 24);
@@ -1265,6 +1304,8 @@
             this.tapSettings.ResumeLayout(false);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
+            this.flowPanelVolumeStep.ResumeLayout(false);
+            this.flowPanelVolumeStep.PerformLayout();
             this.flowPanelHotKey.ResumeLayout(false);
             this.flowPanelHotKey.PerformLayout();
             this.tapHotkeys.ResumeLayout(false);
@@ -1274,6 +1315,7 @@
             this.tapAbout.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numVolumeStep)).EndInit();
             this.notifyIconStrip.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
@@ -1369,6 +1411,9 @@
         private System.Windows.Forms.CheckBox chkFixTrayIconContextMenuPosition;
         private System.Windows.Forms.CheckBox chkMoveVolumeMixerToCursor;
         private System.Windows.Forms.CheckBox chkEnableVolumeStepHook;
+        private System.Windows.Forms.FlowLayoutPanel flowPanelVolumeStep;
+        private System.Windows.Forms.NumericUpDown numVolumeStep;
+        private System.Windows.Forms.Label lblVolumeStepPercent;
         private System.Windows.Forms.ToolStripMenuItem mnuChangePlaybackIcon;
         private System.Windows.Forms.ToolStripMenuItem mnuResetPlaybackIcon;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
