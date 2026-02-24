@@ -17,6 +17,10 @@
             {
                 components.Dispose();
             }
+            if (disposing && _volumeHook != null)
+            {
+                _volumeHook.Dispose();
+            }
             base.Dispose(disposing);
         }
 
@@ -87,6 +91,7 @@
             this.chkMiddleClickForVolumeMixer = new System.Windows.Forms.CheckBox();
             this.chkFixTrayIconContextMenuPosition = new System.Windows.Forms.CheckBox();
             this.chkMoveVolumeMixerToCursor = new System.Windows.Forms.CheckBox();
+            this.chkEnableVolumeStepHook = new System.Windows.Forms.CheckBox();
             this.btnCheckUpdate = new System.Windows.Forms.Button();
             this.tapHotkeys = new System.Windows.Forms.TabPage();
             this.btnClearAll = new System.Windows.Forms.Button();
@@ -499,6 +504,7 @@
             this.flowLayoutPanel1.Controls.Add(this.chkFixTrayIconContextMenuPosition);
             this.flowLayoutPanel1.Controls.Add(this.chkMiddleClickForVolumeMixer);
             this.flowLayoutPanel1.Controls.Add(this.chkMoveVolumeMixerToCursor);
+            this.flowLayoutPanel1.Controls.Add(this.chkEnableVolumeStepHook);
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 6);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -746,6 +752,19 @@
             this.toolTip1.SetToolTip(this.chkMoveVolumeMixerToCursor, "Moves the Volume Mixer window to the cursor position when opened");
             this.chkMoveVolumeMixerToCursor.UseVisualStyleBackColor = true;
             this.chkMoveVolumeMixerToCursor.CheckedChanged += new System.EventHandler(this.chkMoveVolumeMixerToCursor_CheckedChanged);
+            // 
+            // chkEnableVolumeStepHook
+            // 
+            this.chkEnableVolumeStepHook.AutoSize = true;
+            this.chkEnableVolumeStepHook.Location = new System.Drawing.Point(2, 525);
+            this.chkEnableVolumeStepHook.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.chkEnableVolumeStepHook.Name = "chkEnableVolumeStepHook";
+            this.chkEnableVolumeStepHook.Size = new System.Drawing.Size(240, 24);
+            this.chkEnableVolumeStepHook.TabIndex = 12;
+            this.chkEnableVolumeStepHook.Text = "Change volume by 1%";
+            this.toolTip1.SetToolTip(this.chkEnableVolumeStepHook, "Intercept Volume Up/Down keys to change volume in 1% steps");
+            this.chkEnableVolumeStepHook.UseVisualStyleBackColor = true;
+            this.chkEnableVolumeStepHook.CheckedChanged += new System.EventHandler(this.chkEnableVolumeStepHook_CheckedChanged);
             // 
             // btnCheckUpdate
             // 
@@ -1334,6 +1353,7 @@
         private System.Windows.Forms.CheckBox chkMiddleClickForVolumeMixer;
         private System.Windows.Forms.CheckBox chkFixTrayIconContextMenuPosition;
         private System.Windows.Forms.CheckBox chkMoveVolumeMixerToCursor;
+        private System.Windows.Forms.CheckBox chkEnableVolumeStepHook;
         private System.Windows.Forms.ToolStripMenuItem mnuChangePlaybackIcon;
         private System.Windows.Forms.ToolStripMenuItem mnuResetPlaybackIcon;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;

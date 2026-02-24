@@ -144,6 +144,8 @@
     <Compile Include="FavouriteDeviceManager.cs" />
     <Compile Include="Helpers\ConnectionHelper.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
+    <Compile Include="Helpers\VolumeHelper.cs" />
+    <Compile Include="Helpers\VolumeHook.cs" />
     <Compile Include="HotKeyData\Enums.cs" />
     <Compile Include="HotKeyData\HotKey.cs" />
     <Compile Include="HotKeyData\HotKeyManager.cs" />

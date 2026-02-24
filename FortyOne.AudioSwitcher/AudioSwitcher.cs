@@ -66,6 +66,7 @@ namespace FortyOne.AudioSwitcher
         private bool _updateAvailable;
         public bool DisableHotKeyFunction = false;
         private int _currentDPI = 0;
+        private VolumeHook _volumeHook;
 
         public AudioSwitcher()
         {
@@ -457,6 +458,23 @@ namespace FortyOne.AudioSwitcher
             Program.Settings.EnableQuickSwitchHotKey = chkEnableQuickSwitchHotKey.Checked;
         }
 
+        private void chkEnableVolumeStepHook_CheckedChanged(object sender, EventArgs e)
+        {
+            Program.Settings.EnableVolumeStepHook = chkEnableVolumeStepHook.Checked;
+            if (Program.Settings.EnableVolumeStepHook)
+            {
+                if (_volumeHook == null)
+                    _volumeHook = new VolumeHook();
+                else
+                    _volumeHook.Hook();
+            }
+            else
+            {
+                if (_volumeHook != null)
+                    _volumeHook.Unhook();
+            }
+        }
+
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
         {
             _doubleClickHappened = false;
@@ -602,7 +620,7 @@ namespace FortyOne.AudioSwitcher
             notifyIconStrip.Show(f, new Point(0, 0));
         }
 
-        private async void t_Tick(object sender, EventArgs e)
+        private void t_Tick(object sender, EventArgs e)
         {
             ((Timer)sender).Stop();
             if (_doubleClickHappened)
@@ -969,6 +987,7 @@ namespace FortyOne.AudioSwitcher
             chkMiddleClickForVolumeMixer.Checked = Program.Settings.MiddleClickForVolumeMixer;
             chkFixTrayIconContextMenuPosition.Checked = Program.Settings.FixTrayIconContextMenuPosition;
             chkMoveVolumeMixerToCursor.Checked = Program.Settings.MoveVolumeMixerToCursor;
+            chkEnableVolumeStepHook.Checked = Program.Settings.EnableVolumeStepHook;
             
             ApplyContextMenuBehavior();
 
