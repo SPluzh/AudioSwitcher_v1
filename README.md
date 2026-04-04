@@ -3,7 +3,7 @@
 A fork of the original [AudioSwitcher (v1)](https://github.com/FortyOne/AudioSwitcher) by FortyOne (xenolightning). 
 This version brings modern improvements and features to the classic v1.x branch.
 
-![AudioSwitcher Demonstration](https://github.com/user-attachments/assets/94409893-cce7-4b8c-bc8c-7ad22bb6de98)
+https://github.com/user-attachments/assets/94409893-cce7-4b8c-bc8c-7ad22bb6de98
 
 ## Key Features & Improvements
 This fork includes several enhancements over the original project:
