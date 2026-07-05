@@ -71,62 +71,7 @@ namespace FortyOne.AudioSwitcher
             {
             }
 
-            lblVersion.Text = "Original Version: 1.8.0.142 (2018)";
-            lblCopyright.Text = "Original Copyright © Sean Chapman 2015-2018";
-            label6.Text = "Original Developer: Sean Chapman";
-
-            // Prevent overlap and adjust positions programmatically
-            twitterLink.Left = label6.Right + 5;
-
-            // Create Fork details controls
-            Label lblForkHeader = new Label
-            {
-                Text = "Fork by SPluzh:",
-                Font = new Font(label6.Font, FontStyle.Bold),
-                AutoSize = true,
-                Location = new Point(7, 163)
-            };
-
-            Label lblForkVersion = new Label
-            {
-                Text = "Fork Version: 1.9.0.6 (2026)",
-                AutoSize = true,
-                Location = new Point(7, 189)
-            };
-
-            LinkLabel linkForkGithub = new LinkLabel
-            {
-                Text = "GitHub Releases",
-                AutoSize = true,
-                Location = new Point(7, 215)
-            };
-            linkForkGithub.LinkClicked += (s, args) =>
-            {
-                try
-                {
-                    Process.Start("https://github.com/SPluzh/AudioSwitcher_v1/releases");
-                }
-                catch
-                {
-                }
-            };
-
-            tapAbout.Controls.Add(lblForkHeader);
-            tapAbout.Controls.Add(lblForkVersion);
-            tapAbout.Controls.Add(linkForkGithub);
-
-            // Move the remaining controls down
-            label3.Top = 245;
-            linkIssues.Top = 245;
-            linkWiki.Top = 245;
-
-            label4.Top = 275;
-            linkLabel1.Top = 275;
-
-            pictureBox2.Top = 330;
-            pictureBox1.Top = 330;
-
-            label2.Top = 380;
+            SetupAboutTabLayout();
 
 
             _originalTrayIcon = new Icon(notifyIcon1.Icon, 32, 32);
@@ -2053,5 +1998,274 @@ namespace FortyOne.AudioSwitcher
 
         [DllImport("user32.dll")]
         public static extern short GetKeyState(int nVirtKey);
+
+        private void SetupAboutTabLayout()
+        {
+            // 1. Remove all old controls we are replacing
+            tapAbout.Controls.Clear();
+            tapAbout.BackColor = Color.White;
+
+            // 2. Create the main vertical layout container
+            FlowLayoutPanel mainFlow = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                FlowDirection = FlowDirection.TopDown,
+                WrapContents = false,
+                AutoScroll = true,
+                Padding = new Padding(15),
+                BackColor = Color.White
+            };
+            tapAbout.Controls.Add(mainFlow);
+
+            // Set main font on container
+            mainFlow.Font = new Font("Segoe UI", 9F, FontStyle.Regular);
+
+            // ==================== HEADER ROW ====================
+            FlowLayoutPanel headerFlow = new FlowLayoutPanel
+            {
+                FlowDirection = FlowDirection.LeftToRight,
+                WrapContents = false,
+                AutoSize = true,
+                Margin = new Padding(0, 0, 0, 5),
+                BackColor = Color.Transparent
+            };
+
+            try
+            {
+                PictureBox picAppIcon = new PictureBox
+                {
+                    Size = new Size(36, 36),
+                    Image = this.Icon.ToBitmap(),
+                    SizeMode = PictureBoxSizeMode.StretchImage,
+                    Padding = new Padding(0),
+                    Margin = new Padding(0, 5, 10, 0)
+                };
+                headerFlow.Controls.Add(picAppIcon);
+            }
+            catch
+            {
+            }
+
+            FlowLayoutPanel titleFlow = new FlowLayoutPanel
+            {
+                FlowDirection = FlowDirection.TopDown,
+                WrapContents = false,
+                AutoSize = true,
+                Margin = new Padding(0),
+                BackColor = Color.Transparent
+            };
+
+            Label lblTitle = new Label
+            {
+                Text = "Audio Switcher",
+                Font = new Font("Segoe UI", 16F, FontStyle.Bold),
+                ForeColor = Color.FromArgb(30, 30, 30),
+                AutoSize = true,
+                Margin = new Padding(0)
+            };
+            Label lblSubtitle = new Label
+            {
+                Text = "Sleek & lightweight audio device switcher.",
+                Font = new Font("Segoe UI", 9F, FontStyle.Italic),
+                ForeColor = Color.Gray,
+                AutoSize = true,
+                UseMnemonic = false,
+                Margin = new Padding(0, 2, 0, 0)
+            };
+            titleFlow.Controls.Add(lblTitle);
+            titleFlow.Controls.Add(lblSubtitle);
+
+            headerFlow.Controls.Add(titleFlow);
+            mainFlow.Controls.Add(headerFlow);
+
+            // Separator helper (fixed size so window size does not affect it)
+            Func<Control> createSeparator = () => new Panel
+            {
+                Size = new Size(390, 1),
+                BackColor = Color.FromArgb(230, 230, 230),
+                Margin = new Padding(0, 12, 0, 12)
+            };
+
+            // Separator 1
+            mainFlow.Controls.Add(createSeparator());
+
+            // ==================== ORIGINAL VERSION SECTION ====================
+            Label lblOrigHeader = new Label
+            {
+                Text = "ORIGINAL VERSION (2018)",
+                Font = new Font("Segoe UI", 9.5F, FontStyle.Bold),
+                ForeColor = Color.FromArgb(100, 100, 100),
+                AutoSize = true,
+                Margin = new Padding(0, 0, 0, 4)
+            };
+            mainFlow.Controls.Add(lblOrigHeader);
+
+            Label lblOrigDetails = new Label
+            {
+                Text = "Version: 1.8.0.142\r\nOriginal Developer: Sean Chapman",
+                Font = new Font("Segoe UI", 9F, FontStyle.Regular),
+                ForeColor = Color.FromArgb(60, 60, 60),
+                AutoSize = true,
+                Margin = new Padding(15, 0, 0, 6)
+            };
+            mainFlow.Controls.Add(lblOrigDetails);
+
+            FlowLayoutPanel origLinksFlow = new FlowLayoutPanel
+            {
+                FlowDirection = FlowDirection.LeftToRight,
+                WrapContents = false,
+                AutoSize = true,
+                Margin = new Padding(15, 0, 0, 0),
+                BackColor = Color.Transparent
+            };
+
+            PictureBox picTwitter = new PictureBox
+            {
+                Size = new Size(18, 18),
+                Image = global::FortyOne.AudioSwitcher.Properties.Resources.twitter,
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                Padding = new Padding(0),
+                Margin = new Padding(0, 2, 6, 0),
+                Cursor = Cursors.Hand
+            };
+            picTwitter.Click += (s, e) => { try { Process.Start("https://www.twitter.com/xenolightning"); } catch { } };
+
+            LinkLabel lnkTwitter = new LinkLabel
+            {
+                Text = "@xenolightning",
+                Font = new Font("Segoe UI", 9F, FontStyle.Regular),
+                AutoSize = true,
+                Margin = new Padding(0, 2, 20, 0),
+                Padding = new Padding(0, 0, 5, 0)
+            };
+            lnkTwitter.LinkClicked += (s, e) => { try { Process.Start("https://www.twitter.com/xenolightning"); } catch { } };
+
+            LinkLabel lnkWeb = new LinkLabel
+            {
+                Text = "Original Website",
+                Font = new Font("Segoe UI", 9F, FontStyle.Regular),
+                AutoSize = true,
+                Margin = new Padding(0, 2, 0, 0),
+                Padding = new Padding(0, 0, 5, 0)
+            };
+            lnkWeb.LinkClicked += (s, e) => { try { Process.Start("http://audioswit.ch/er"); } catch { } };
+
+            origLinksFlow.Controls.Add(picTwitter);
+            origLinksFlow.Controls.Add(lnkTwitter);
+            origLinksFlow.Controls.Add(lnkWeb);
+            mainFlow.Controls.Add(origLinksFlow);
+
+            // Separator 2
+            mainFlow.Controls.Add(createSeparator());
+
+            // ==================== FORK SECTION ====================
+            Label lblForkHeader = new Label
+            {
+                Text = "CURRENT FORK (2026)",
+                Font = new Font("Segoe UI", 9.5F, FontStyle.Bold),
+                ForeColor = Color.FromArgb(100, 100, 100),
+                AutoSize = true,
+                Margin = new Padding(0, 0, 0, 4)
+            };
+            mainFlow.Controls.Add(lblForkHeader);
+
+            Label lblForkDetails = new Label
+            {
+                Text = "Version: 1.9.0.7\r\nFork Author: SPluzh",
+                Font = new Font("Segoe UI", 9F, FontStyle.Regular),
+                ForeColor = Color.FromArgb(60, 60, 60),
+                AutoSize = true,
+                Margin = new Padding(15, 0, 0, 6)
+            };
+            mainFlow.Controls.Add(lblForkDetails);
+
+            FlowLayoutPanel forkLinksFlow = new FlowLayoutPanel
+            {
+                FlowDirection = FlowDirection.LeftToRight,
+                WrapContents = false,
+                AutoSize = true,
+                Margin = new Padding(15, 0, 0, 0),
+                BackColor = Color.Transparent
+            };
+
+            PictureBox picGitHub = new PictureBox
+            {
+                Size = new Size(18, 18),
+                Image = global::FortyOne.AudioSwitcher.Properties.Resources.github,
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                Padding = new Padding(0),
+                Margin = new Padding(0, 2, 6, 0),
+                Cursor = Cursors.Hand
+            };
+            picGitHub.Click += (s, e) => { try { Process.Start("https://github.com/SPluzh/AudioSwitcher_v1"); } catch { } };
+
+            LinkLabel lnkGitHub = new LinkLabel
+            {
+                Text = "GitHub Releases",
+                Font = new Font("Segoe UI", 9F, FontStyle.Regular),
+                AutoSize = true,
+                Margin = new Padding(0, 2, 0, 0),
+                Padding = new Padding(0, 0, 5, 0)
+            };
+            lnkGitHub.LinkClicked += (s, e) => { try { Process.Start("https://github.com/SPluzh/AudioSwitcher_v1/releases"); } catch { } };
+
+            forkLinksFlow.Controls.Add(picGitHub);
+            forkLinksFlow.Controls.Add(lnkGitHub);
+            mainFlow.Controls.Add(forkLinksFlow);
+
+            // Separator 3
+            mainFlow.Controls.Add(createSeparator());
+
+            // ==================== SUPPORT & LICENSE SECTION ====================
+            Label lblSupportHeader = new Label
+            {
+                Text = "SUPPORT & LICENSE",
+                Font = new Font("Segoe UI", 9.5F, FontStyle.Bold),
+                ForeColor = Color.FromArgb(100, 100, 100),
+                AutoSize = true,
+                Margin = new Padding(0, 0, 0, 4)
+            };
+            mainFlow.Controls.Add(lblSupportHeader);
+
+            FlowLayoutPanel flowSupport = new FlowLayoutPanel
+            {
+                FlowDirection = FlowDirection.LeftToRight,
+                WrapContents = false,
+                AutoSize = true,
+                Margin = new Padding(15, 0, 0, 8),
+                BackColor = Color.Transparent
+            };
+
+            Label lblSupportText1 = new Label
+            {
+                Text = "Having trouble?",
+                AutoSize = true,
+                Margin = new Padding(0, 2, 0, 0)
+            };
+
+            LinkLabel lnkIssues = new LinkLabel
+            {
+                Text = "Issues Tracker",
+                Font = new Font("Segoe UI", 9F, FontStyle.Regular),
+                AutoSize = true,
+                Margin = new Padding(3, 2, 3, 0),
+                Padding = new Padding(0, 0, 5, 0)
+            };
+            lnkIssues.LinkClicked += (s, e) => { try { Process.Start("https://github.com/SPluzh/AudioSwitcher_v1/issues"); } catch { } };
+
+            flowSupport.Controls.Add(lblSupportText1);
+            flowSupport.Controls.Add(lnkIssues);
+            mainFlow.Controls.Add(flowSupport);
+
+            Label lblLicense = new Label
+            {
+                Text = "Audio Switcher is 100% free and open-source.\r\nYou can use it wherever and whenever you wish.",
+                Font = new Font("Segoe UI", 9F, FontStyle.Regular),
+                ForeColor = Color.FromArgb(100, 100, 100),
+                AutoSize = true,
+                Margin = new Padding(15, 0, 0, 0)
+            };
+            mainFlow.Controls.Add(lblLicense);
+        }
 	}
 }

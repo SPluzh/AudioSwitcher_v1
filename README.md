@@ -1,4 +1,4 @@
-# AudioSwitcher v1.9.0.6 (SPluzh Fork)
+# AudioSwitcher v1.9.0.7 (SPluzh Fork)
 
 A fork of the original [AudioSwitcher (v1)](https://github.com/FortyOne/AudioSwitcher) by FortyOne (xenolightning). 
 This version brings modern improvements and features to the classic v1.x branch.
