@@ -71,8 +71,63 @@ namespace FortyOne.AudioSwitcher
             {
             }
 
-            lblVersion.Text = "Version: " + AssemblyVersion;
-            lblCopyright.Text = AssemblyCopyright;
+            lblVersion.Text = "Original Version: 1.8.0.142 (2018)";
+            lblCopyright.Text = "Original Copyright © Sean Chapman 2015-2018";
+            label6.Text = "Original Developer: Sean Chapman";
+
+            // Prevent overlap and adjust positions programmatically
+            twitterLink.Left = label6.Right + 5;
+
+            // Create Fork details controls
+            Label lblForkHeader = new Label
+            {
+                Text = "Fork by SPluzh:",
+                Font = new Font(label6.Font, FontStyle.Bold),
+                AutoSize = true,
+                Location = new Point(7, 163)
+            };
+
+            Label lblForkVersion = new Label
+            {
+                Text = "Fork Version: 1.9.0.6 (2026)",
+                AutoSize = true,
+                Location = new Point(7, 189)
+            };
+
+            LinkLabel linkForkGithub = new LinkLabel
+            {
+                Text = "GitHub Releases",
+                AutoSize = true,
+                Location = new Point(7, 215)
+            };
+            linkForkGithub.LinkClicked += (s, args) =>
+            {
+                try
+                {
+                    Process.Start("https://github.com/SPluzh/AudioSwitcher_v1/releases");
+                }
+                catch
+                {
+                }
+            };
+
+            tapAbout.Controls.Add(lblForkHeader);
+            tapAbout.Controls.Add(lblForkVersion);
+            tapAbout.Controls.Add(linkForkGithub);
+
+            // Move the remaining controls down
+            label3.Top = 245;
+            linkIssues.Top = 245;
+            linkWiki.Top = 245;
+
+            label4.Top = 275;
+            linkLabel1.Top = 275;
+
+            pictureBox2.Top = 330;
+            pictureBox1.Top = 330;
+
+            label2.Top = 380;
+
 
             _originalTrayIcon = new Icon(notifyIcon1.Icon, 32, 32);
 
@@ -816,12 +871,12 @@ namespace FortyOne.AudioSwitcher
 
         private void linkIssues_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://github.com/xenolightning/AudioSwitcher_v1/issues");
+            Process.Start("https://github.com/SPluzh/AudioSwitcher_v1/issues");
         }
 
         private void linkWiki_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://github.com/xenolightning/AudioSwitcher_v1/wiki");
+            Process.Start("https://github.com/SPluzh/AudioSwitcher_v1/wiki");
         }
 
         private void chkShowDPDeviceIconInTray_CheckedChanged(object sender, EventArgs e)
@@ -1778,7 +1833,7 @@ namespace FortyOne.AudioSwitcher
 
         private void pictureBox1_Click_1(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/xenolightning/AudioSwitcher_v1");
+            Process.Start("https://github.com/SPluzh/AudioSwitcher_v1");
         }
 
         private void chkNotifyUpdates_CheckedChanged(object sender, EventArgs e)
