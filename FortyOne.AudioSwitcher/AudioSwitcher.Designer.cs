@@ -1,4 +1,4 @@
-﻿namespace FortyOne.AudioSwitcher
+namespace FortyOne.AudioSwitcher
 {
     partial class AudioSwitcher
     {
@@ -474,45 +474,43 @@
             this.listBoxRecording.View = System.Windows.Forms.View.Tile;
             this.listBoxRecording.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.listBoxRecording_ItemSelectionChanged);
             this.listBoxRecording.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBoxRecording_MouseDoubleClick);
-            // 
-            // tapSettings
-            // 
-            this.tapSettings.Controls.Add(this.flowLayoutPanel1);
-            this.tapSettings.Controls.Add(this.btnCheckUpdate);
-            this.tapSettings.Location = new System.Drawing.Point(4, 29);
-            this.tapSettings.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.tapSettings.Name = "tapSettings";
-            this.tapSettings.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.tapSettings.Size = new System.Drawing.Size(433, 693);
-            this.tapSettings.TabIndex = 3;
-            this.tapSettings.Text = "Settings";
-            this.tapSettings.UseVisualStyleBackColor = true;
-            // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.flowLayoutPanel1.Controls.Add(this.chkCloseToTray);
-            this.flowLayoutPanel1.Controls.Add(this.chkAutoStartWithWindows);
-            this.flowLayoutPanel1.Controls.Add(this.chkStartMinimized);
-            this.flowLayoutPanel1.Controls.Add(this.chkDisableHotKeys);
-            this.flowLayoutPanel1.Controls.Add(this.chkQuickSwitch);
-            this.flowLayoutPanel1.Controls.Add(this.chkEnableQuickSwitchHotKey);
-            this.flowLayoutPanel1.Controls.Add(this.flowPanelHotKey);
-            this.flowLayoutPanel1.Controls.Add(this.chkDualSwitchMode);
-            this.flowLayoutPanel1.Controls.Add(this.chkShowDiabledDevices);
-            this.flowLayoutPanel1.Controls.Add(this.chkShowUnknownDevicesInHotkeyList);
-            this.flowLayoutPanel1.Controls.Add(this.chkShowDisconnectedDevices);
-            this.flowLayoutPanel1.Controls.Add(this.chkShowDPDeviceIconInTray);
-            this.flowLayoutPanel1.Controls.Add(this.chkNotifyUpdates);
-            this.flowLayoutPanel1.Controls.Add(this.chkDisableDblClick);
-            this.flowLayoutPanel1.Controls.Add(this.chkFixTrayIconContextMenuPosition);
-            this.flowLayoutPanel1.Controls.Add(this.chkMiddleClickForVolumeMixer);
-            this.flowLayoutPanel1.Controls.Add(this.chkMoveVolumeMixerToCursor);
-            this.flowLayoutPanel1.Controls.Add(this.chkEnableVolumeStepHook);
-            this.flowLayoutPanel1.Controls.Add(this.flowPanelVolumeStep);
-            this.flowLayoutPanel1.Controls.Add(this.chkShowVolumeOSD);
+             // 
+             // tapSettings
+             // 
+             this.tapSettings.Controls.Add(this.flowLayoutPanel1);
+             this.tapSettings.Location = new System.Drawing.Point(4, 29);
+             this.tapSettings.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+             this.tapSettings.Name = "tapSettings";
+             this.tapSettings.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
+             this.tapSettings.Size = new System.Drawing.Size(433, 693);
+             this.tapSettings.TabIndex = 3;
+             this.tapSettings.Text = "Settings";
+             this.tapSettings.UseVisualStyleBackColor = true;
+             // 
+             // flowLayoutPanel1
+             // 
+             this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+             | System.Windows.Forms.AnchorStyles.Left) 
+             | System.Windows.Forms.AnchorStyles.Right)));
+             this.flowLayoutPanel1.Controls.Add(this.chkCloseToTray);
+             this.flowLayoutPanel1.Controls.Add(this.chkAutoStartWithWindows);
+             this.flowLayoutPanel1.Controls.Add(this.chkStartMinimized);
+             this.flowLayoutPanel1.Controls.Add(this.chkDisableHotKeys);
+             this.flowLayoutPanel1.Controls.Add(this.chkQuickSwitch);
+             this.flowLayoutPanel1.Controls.Add(this.chkEnableQuickSwitchHotKey);
+             this.flowLayoutPanel1.Controls.Add(this.flowPanelHotKey);
+             this.flowLayoutPanel1.Controls.Add(this.chkDualSwitchMode);
+             this.flowLayoutPanel1.Controls.Add(this.chkShowDiabledDevices);
+             this.flowLayoutPanel1.Controls.Add(this.chkShowUnknownDevicesInHotkeyList);
+             this.flowLayoutPanel1.Controls.Add(this.chkShowDisconnectedDevices);
+             this.flowLayoutPanel1.Controls.Add(this.chkShowDPDeviceIconInTray);
+             this.flowLayoutPanel1.Controls.Add(this.chkDisableDblClick);
+             this.flowLayoutPanel1.Controls.Add(this.chkFixTrayIconContextMenuPosition);
+             this.flowLayoutPanel1.Controls.Add(this.chkMiddleClickForVolumeMixer);
+             this.flowLayoutPanel1.Controls.Add(this.chkMoveVolumeMixerToCursor);
+             this.flowLayoutPanel1.Controls.Add(this.chkEnableVolumeStepHook);
+             this.flowLayoutPanel1.Controls.Add(this.flowPanelVolumeStep);
+             this.flowLayoutPanel1.Controls.Add(this.chkShowVolumeOSD);
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 6);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -1125,8 +1123,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(370, 60);
             this.label2.TabIndex = 5;
-            this.label2.Text = "Audio Switcher is 100% free.\r\nYou can use it wherever and whenever you wish.\r\nIf " +
-    "you like the app, please donate :-)";
+            this.label2.Text = "Audio Switcher is 100% free.\r\nYou can use it wherever and whenever you wish.";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblCopyright
@@ -1176,7 +1173,6 @@
             this.toolStripSeparator1,
             this.classicVolumeMixerToolStripMenuItem,
             this.preferencesToolStripMenuItem,
-            this.updateAvailableToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.notifyIconStrip.Name = "notifyIconStrip";
             this.notifyIconStrip.Size = new System.Drawing.Size(264, 138);
@@ -1201,14 +1197,6 @@
             this.preferencesToolStripMenuItem.Text = "Open Preferences";
             this.preferencesToolStripMenuItem.Click += new System.EventHandler(this.preferencesToolStripMenuItem_Click);
             // 
-            // updateAvailableToolStripMenuItem
-            // 
-            this.updateAvailableToolStripMenuItem.BackColor = System.Drawing.Color.LightGoldenrodYellow;
-            this.updateAvailableToolStripMenuItem.Name = "updateAvailableToolStripMenuItem";
-            this.updateAvailableToolStripMenuItem.Size = new System.Drawing.Size(263, 32);
-            this.updateAvailableToolStripMenuItem.Text = "New Update Available!";
-            this.updateAvailableToolStripMenuItem.Click += new System.EventHandler(this.updateAvailableToolStripMenuItem_Click);
-            // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
@@ -1226,9 +1214,7 @@
             this.statusStrip1.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.statusLabelUpdate,
-            this.toolStripStatusLabel1,
-            this.statusLabelDonate});
+            this.toolStripStatusLabel1});
             this.statusStrip1.Location = new System.Drawing.Point(2, 728);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.ShowItemToolTips = true;
@@ -1236,38 +1222,11 @@
             this.statusStrip1.TabIndex = 3;
             this.statusStrip1.Text = "statusStrip1";
             // 
-            // statusLabelUpdate
-            // 
-            this.statusLabelUpdate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.statusLabelUpdate.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.statusLabelUpdate.IsLink = true;
-            this.statusLabelUpdate.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
-            this.statusLabelUpdate.LinkColor = System.Drawing.Color.Red;
-            this.statusLabelUpdate.Margin = new System.Windows.Forms.Padding(0, 0, 0, 2);
-            this.statusLabelUpdate.Name = "statusLabelUpdate";
-            this.statusLabelUpdate.Size = new System.Drawing.Size(151, 25);
-            this.statusLabelUpdate.Text = "Update Available!";
-            this.statusLabelUpdate.Click += new System.EventHandler(this.statusLabelUpdate_Click);
-            // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(220, 20);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(420, 20);
             this.toolStripStatusLabel1.Spring = true;
-            // 
-            // statusLabelDonate
-            // 
-            this.statusLabelDonate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.statusLabelDonate.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.statusLabelDonate.IsLink = true;
-            this.statusLabelDonate.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
-            this.statusLabelDonate.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-            this.statusLabelDonate.Margin = new System.Windows.Forms.Padding(0, 0, 0, 2);
-            this.statusLabelDonate.Name = "statusLabelDonate";
-            this.statusLabelDonate.Size = new System.Drawing.Size(70, 25);
-            this.statusLabelDonate.Text = "Donate";
-            this.statusLabelDonate.ToolTipText = "Donate via PayPal";
-            this.statusLabelDonate.Click += new System.EventHandler(this.statusLabelDonate_Click);
             // 
             // AudioSwitcher
             // 

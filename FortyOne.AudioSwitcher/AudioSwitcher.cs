@@ -101,8 +101,8 @@ namespace FortyOne.AudioSwitcher
 
             hotKeyBindingSource.DataSource = HotKeyManager.HotKeys;
 
-            //Heartbeat
-            Task.Factory.StartNew(CheckForNewVersion);
+            //Heartbeat removed
+            //Task.Factory.StartNew(CheckForNewVersion);
 
             if (Program.Settings.QuickSwitchHotKey != null && Program.Settings.QuickSwitchHotKey != "")
             {
@@ -322,45 +322,12 @@ namespace FortyOne.AudioSwitcher
 
         private void CheckForNewVersion()
         {
-            statusLabelUpdate.Visible = false;
-
-            using (var client = ConnectionHelper.GetAudioSwitcherProxy())
-            {
-                if (client == null)
-                    return;
-
-                _retrievedVersion = client.GetUpdateInfo(AssemblyVersion);
-
-                if (_retrievedVersion != null && !string.IsNullOrEmpty(_retrievedVersion.URL))
-                {
-                    _updateAvailable = true;
-                    statusLabelUpdate.Visible = true;
-                    statusLabelUpdate.ToolTipText = "New Version Available - " + _retrievedVersion.VersionInfo;
-
-                    BeginInvoke(new Action(RefreshNotifyIconItems));
-
-                    if (Program.Settings.UpdateNotificationsEnabled)
-                        ShowUpdateNotification(_retrievedVersion);
-                }
-            }
+            // Disabled to prevent internet access
         }
 
         private void ShowUpdateNotification(AudioSwitcherVersionInfo retrievedVersion)
         {
-            if (InvokeRequired)
-            {
-                BeginInvoke(new Action(() => ShowUpdateNotification(retrievedVersion)));
-                return;
-            }
-
-            notifyIcon1.BalloonTipText = "Click here to update to " + retrievedVersion.VersionInfo;
-            notifyIcon1.BalloonTipTitle = "Audio Switcher Update";
-            notifyIcon1.BalloonTipClicked += (s, e) =>
-            {
-                ShowUpdateForm();
-            };
-
-            notifyIcon1.ShowBalloonTip(3000);
+            // Disabled to prevent internet access
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -400,7 +367,7 @@ namespace FortyOne.AudioSwitcher
 
         private static void Donate()
         {
-            Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=Q9TDQPY4B369A");
+            // Disabled to prevent internet access
         }
 
         private void mnuFavouritePlaybackDevice_Click(object sender, EventArgs e)
@@ -747,22 +714,7 @@ namespace FortyOne.AudioSwitcher
 
         private void btnCheckUpdate_Click(object sender, EventArgs e)
         {
-            using (var client = ConnectionHelper.GetAudioSwitcherProxy())
-            {
-                if (client == null)
-                    return;
-
-                var vi = client.GetUpdateInfo(AssemblyVersion);
-                if (vi != null && !string.IsNullOrEmpty(vi.URL))
-                {
-                    var udf = new UpdateForm(vi);
-                    udf.ShowDialog(this);
-                }
-                else
-                {
-                    MessageBox.Show(this, "You have the latest version!");
-                }
-            }
+            MessageBox.Show(this, "You have the latest version!");
         }
 
         private void setHotKeyToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -1839,27 +1791,22 @@ namespace FortyOne.AudioSwitcher
 
         private void statusLabelUpdate_Click(object sender, EventArgs e)
         {
-            ShowUpdateForm();
+            // Disabled
         }
 
         private void ShowUpdateForm(bool topMost = false)
         {
-            if (_retrievedVersion == null)
-                return;
-
-            var udf = new UpdateForm(_retrievedVersion);
-            udf.TopMost = topMost;
-            udf.ShowDialog(this);
+            // Disabled
         }
 
         private void statusLabelDonate_Click(object sender, EventArgs e)
         {
-            Donate();
+            // Disabled
         }
 
         private void updateAvailableToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ShowUpdateForm(true);
+            // Disabled
         }
 
         private void pictureBox2_Click(object sender, EventArgs e)
