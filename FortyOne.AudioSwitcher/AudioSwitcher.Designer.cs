@@ -1250,7 +1250,6 @@ namespace FortyOne.AudioSwitcher
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResizeEnd += new System.EventHandler(this.AudioSwitcher_ResizeEnd);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.AudioSwitcher_KeyDown);
             this.playbackStrip.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tapPlayback.ResumeLayout(false);

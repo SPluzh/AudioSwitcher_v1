@@ -25,11 +25,6 @@ namespace FortyOne.AudioSwitcher
 {
     public partial class AudioSwitcher : Form
     {
-        /// <summary>
-        ///     EASTER EGG! SHHH!
-        /// </summary>
-        private readonly Keys[] KONAMI_CODE = { Keys.Up, Keys.Up, Keys.Down, Keys.Down, Keys.Left, Keys.Right, Keys.Left, Keys.Right, Keys.B, Keys.A };
-
         private static AudioSwitcher _instance;
         private readonly Icon _originalTrayIcon;
 
@@ -48,20 +43,10 @@ namespace FortyOne.AudioSwitcher
             {DeviceIcon.Unknown, "3020"}
         };
 
-        private readonly string[] YOUTUBE_VIDEOS =
-        {
-            "http://www.youtube.com/watch?v=QJO3ROT-A4E",
-            "http://www.youtube.com/watch?v=fWNaR-rxAic",
-            "http://www.youtube.com/watch?v=X2WH8mHJnhM",
-            "http://www.youtube.com/watch?v=dQw4w9WgXcQ",
-            "http://www.youtube.com/watch?v=2Z4m4lnjxkY"
-        };
-
         private DeviceState _deviceStateFilter = DeviceState.Active;
         private bool _firstFocus = true;
         private bool _doubleClickHappened;
         private bool _firstStart = true;
-        private int _konamiIndex = 0;
         private AudioSwitcherVersionInfo _retrievedVersion;
         private bool _updateAvailable;
         public bool DisableHotKeyFunction = false;
@@ -677,29 +662,6 @@ namespace FortyOne.AudioSwitcher
         private void button1_Click(object sender, EventArgs e)
         {
             throw new Exception("Fail Message");
-        }
-
-        private void AudioSwitcher_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == KONAMI_CODE[_konamiIndex])
-            {
-                if (_konamiIndex == KONAMI_CODE.Length - 1)
-                {
-                    _konamiIndex = 0;
-
-                    var rand = new Random();
-                    var index = rand.Next(YOUTUBE_VIDEOS.Length);
-                    Process.Start(YOUTUBE_VIDEOS[index]);
-                }
-                else
-                {
-                    ++_konamiIndex;
-                }
-            }
-            else
-            {
-                _konamiIndex = 0;
-            }
         }
 
         private void listBoxPlayback_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
